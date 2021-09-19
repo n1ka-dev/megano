@@ -115,7 +115,14 @@ STATICFILES_DIRS = [
 ]
 STATIC_URL = '/assets/'
 MEDIA_URL = '/uploads/'
+# "Поисковики" статики. Первый ищет статику в STATICFILES_DIRS,
 
+# второй в папках приложений.
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+)
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
