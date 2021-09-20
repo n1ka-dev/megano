@@ -114,7 +114,7 @@ USE_TZ = True
 
 STATIC_ROOT = os.path.join(BASE_DIR, "django-frontend")
 
-STATIC_URL = os.path.join('django-frontend', 'assets')
+STATIC_URL = '/django-frontend/assets/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'django-frontend', 'assets')
 ]
