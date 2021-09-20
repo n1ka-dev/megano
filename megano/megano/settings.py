@@ -109,10 +109,21 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'django-frontend')
+STATIC_ROOT = ""
 
 STATIC_URL = '/assets/'
 MEDIA_URL = '/uploads/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'django-frontend', 'assets')
+]
+# "Поисковики" статики. Первый ищет статику в STATICFILES_DIRS,
+
+# второй в папках приложений.
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+)
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
