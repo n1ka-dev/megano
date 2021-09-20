@@ -21,7 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'django-insecure-&dlrv^9&iu@-x)(y$f+z0&mie6!!ok1w@45dg^@39uak(pc^&('
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -119,7 +119,6 @@ STATICFILES_DIRS = [
 # "Поисковики" статики. Первый ищет статику в STATICFILES_DIRS,
 
 # второй в папках приложений.
-
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
