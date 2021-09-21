@@ -112,12 +112,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_ROOT = os.path.join(BASE_DIR, "django-frontend")
+STATIC_ROOT = os.path.join(BASE_DIR, "django_frontend")
 
 STATIC_URL = '/assets/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'django-frontend', 'assets'),
-    "django-frontend/assets",
+    os.path.join(BASE_DIR, 'django_frontend', 'assets'),
+    "django_frontend/assets",
 
 ]
 # Default primary key field type
