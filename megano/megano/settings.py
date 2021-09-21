@@ -116,8 +116,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, "django-frontend")
 
 STATIC_URL = '/assets/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'django-frontend', 'assets'),
-    "django-frontend/assets",
+    os.path.join(BASE_DIR, 'assets'),
+    os.path.join(BASE_DIR, 'django-frontend'),
+    "assets",
+    "django-frontend",
 
 ]
 # Default primary key field type
