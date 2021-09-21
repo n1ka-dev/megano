@@ -53,7 +53,7 @@ ROOT_URLCONF = 'megano.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'django_frontend')],
+        'DIRS': [os.path.join(BASE_DIR, 'django-frontend')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -112,12 +112,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_ROOT = os.path.join(BASE_DIR, "django_frontend")
+STATIC_ROOT = os.path.join(BASE_DIR, "django-frontend")
 
-STATIC_URL = '/django_frontend/'
+STATIC_URL = '/assets/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'django_frontend', 'assets'),
-    "django_frontend/assets",
+    os.path.join(BASE_DIR, 'django-frontend', 'assets'),
+    "django-frontend/assets",
 
 ]
 # Default primary key field type
