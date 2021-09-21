@@ -53,7 +53,7 @@ ROOT_URLCONF = 'megano.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'django-frontend')],
+        'DIRS': [os.path.join(BASE_DIR, 'django_frontend')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
