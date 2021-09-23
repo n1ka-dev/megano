@@ -1,4 +1,6 @@
 from django.db import models
+from django.urls import reverse_lazy
+from django.utils.safestring import mark_safe
 from pytils.translit import slugify
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
@@ -82,5 +84,11 @@ class Product(models.Model):
         self.slug = self.slug or slugify(self.name)
         super().save(*args, **kwargs)
 
-    def get_tags(self):
+    @property
+    def get_tags_str(self):
         return ' / '.join([tag.name for tag in self.tags.all()])
+
+    @property
+    def get_tags_link(self):
+        catalog = reverse_lazy('catalog')
+        return mark_safe(', '.join([f'<a href="{ catalog }?tag={tag.name}">{tag.name}</a>' for tag in self.tags.all()]))
