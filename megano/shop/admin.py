@@ -1,9 +1,18 @@
 from django.contrib import admin
-from shop.models import Product, Category, Image, Tags
+from shop.models import Product, Category, Image, Tags, Properties, Comment
+
+
+class PropertiesTabular(admin.TabularInline):
+    model = Properties
+
+
+class CommentTabular(admin.TabularInline):
+    model = Comment
 
 
 @admin.register(Product)
 class Product(admin.ModelAdmin):
+    inlines = (PropertiesTabular,CommentTabular)
     list_display = ['name', 'short_description', 'price']
     search_fields = ['name', 'short_description']
 

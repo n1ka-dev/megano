@@ -1,8 +1,8 @@
+from django.conf import settings
 from django.db import models
 from django.urls import reverse_lazy
 from django.utils.safestring import mark_safe
 from pytils.translit import slugify
-from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 
 
@@ -51,6 +51,12 @@ class Image(models.Model):
         verbose_name_plural = _('images')
 
 
+class Properties(models.Model):
+    name = models.CharField(max_length=250, verbose_name=_('name'))
+    value = models.CharField(max_length=250, verbose_name=_('value'))
+    product = models.ForeignKey('Product', on_delete=models.CASCADE)
+
+
 class Product(models.Model):
     name = models.CharField(max_length=250, verbose_name=_('name'))
     published = models.BooleanField(verbose_name=_('published'), default=False)
@@ -61,7 +67,7 @@ class Product(models.Model):
     description = models.TextField(verbose_name=_('description'), null=True, blank=True)
 
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     create_date = models.DateTimeField(auto_now_add=True, verbose_name=_('create date'))
     old_price = models.DecimalField(max_digits=7, decimal_places=2, blank=True, null=True)
     price = models.DecimalField(max_digits=7, decimal_places=2)
@@ -91,4 +97,28 @@ class Product(models.Model):
     @property
     def get_tags_link(self):
         catalog = reverse_lazy('catalog')
-        return mark_safe(', '.join([f'<a href="{ catalog }?tag={tag.name}">{tag.name}</a>' for tag in self.tags.all()]))
+        return mark_safe(', '.join([f'<a href="{catalog}?tag={tag.name}">{tag.name}</a>' for tag in self.tags.all()]))
+
+
+class Comment(models.Model):
+    STATUS_CHOICES = [
+        ('p', _('published')),
+        ('d', _('deleted by admin'))
+    ]
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name=_('author'), null=True)
+    email = models.CharField(verbose_name=_('email'), max_length=50, null=True)
+    nickname = models.CharField(verbose_name=_('nickname'), max_length=50, null=True)
+    product = models.ForeignKey('Product', on_delete=models.CASCADE, verbose_name=_('product'))
+    text = models.TextField(verbose_name=_('text'))
+    create_date = models.DateTimeField(auto_now_add=True, verbose_name=_('create date'))
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES, default='p', verbose_name=_('status'))
+
+    class Meta:
+        db_table = 'comments'
+        verbose_name = _('comment')
+        verbose_name_plural = _('comments')
+
+    def short_comment(self):
+        return f'{self.text[:15]}...' if len(self.text) > 15 else self.text
+
+    short_comment.short_description = _('short description')
