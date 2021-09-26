@@ -77,6 +77,7 @@ class Product(models.Model):
     free_delivery = models.BooleanField(verbose_name=_('free delivery'), default=True)
 
     tags = models.ManyToManyField(Tags, verbose_name=_('tags'))
+    views_count = models.IntegerField(verbose_name=_('views count'), default=0)
 
     class Meta:
         db_table = 'product'
@@ -106,8 +107,8 @@ class Comment(models.Model):
         ('d', _('deleted by admin'))
     ]
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name=_('author'), null=True)
-    email = models.CharField(verbose_name=_('email'), max_length=50, null=True)
-    nickname = models.CharField(verbose_name=_('nickname'), max_length=50, null=True)
+    email = models.CharField(verbose_name=_('email'), max_length=50, null=True, blank=True)
+    nickname = models.CharField(verbose_name=_('nickname'), max_length=50, null=True, blank=True)
     product = models.ForeignKey('Product', on_delete=models.CASCADE, verbose_name=_('product'))
     text = models.TextField(verbose_name=_('text'))
     create_date = models.DateTimeField(auto_now_add=True, verbose_name=_('create date'))
@@ -122,3 +123,4 @@ class Comment(models.Model):
         return f'{self.text[:15]}...' if len(self.text) > 15 else self.text
 
     short_comment.short_description = _('short description')
+

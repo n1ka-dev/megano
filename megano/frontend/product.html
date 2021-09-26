@@ -74,7 +74,7 @@
           <div class="Tabs Tabs_default">
             <div class="Tabs-links"><a class="Tabs-link_ACTIVE Tabs-link" href="#description"><span>Описание</span></a>
                 <a class="Tabs-link" href="#addit"><span>AdditionaL Info</span></a>
-                <a class="Tabs-link" href="#reviews"><span>Reviews ({{ product.comment_set.count }})</span></a>
+                <a class="Tabs-link" href="#reviews"><span>Reviews ({{ comment_count }})</span></a>
             </div>
             <div class="Tabs-wrap">
               <div class="Tabs-block" id="description">
@@ -96,11 +96,11 @@
               </div>
               <div class="Tabs-block" id="reviews">
                 <header class="Section-header">
-                  <h3 class="Section-title">{{ product.comment_set.count }} Reviews
+                  <h3 class="Section-title">{{ comment_count }} Reviews
                   </h3>
                 </header>
                 <div class="Comments">
-                    {% for comment in product.comment_set.all %}
+                    {% for comment in comment %}
                           <div class="Comment">
                                 <div class="Comment-column Comment-column_pict">
                                   <div class="Comment-avatar">
