@@ -2,8 +2,11 @@ from django.contrib.auth.models import User
 from django.db.models import F
 from django.urls import reverse
 from django.views.generic import ListView, DetailView, FormView
+from rest_framework.generics import ListCreateAPIView
+
 from shop.models import Product, Comment
 from shop.forms import CommentForm
+from shop.serializer import CommentSerializer
 
 
 class CatalogView(ListView):
@@ -30,15 +33,10 @@ class ProductDetailView(DetailView, FormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context['comment'] = Comment.objects.filter(product__slug=self.kwargs['slug']).select_related('author')\
-            .annotate(username=F('author__username')).filter(status='p')
+        context['comment'] = Comment.objects.filter(product__slug=self.kwargs['slug']).select_related('author') \
+            .annotate(username=F('author__username')).filter(status='p').order_by('-id')
         context['comment_count'] = len(context['comment'])
         return context
-
-    def get_object(self, *args, **kwargs):
-        item = super().get_object()
-        print(item, 'get_object')
-        return item
 
     def get_success_url(self):
         return reverse('product-detail', kwargs={'slug': self.kwargs['slug']})
@@ -52,14 +50,21 @@ class ProductDetailView(DetailView, FormView):
         return form
 
     def form_valid(self, form):
-        self.object = self.get_object()
         if isinstance(self.request.user, User):
             form.instance.author = self.request.user
-        form.instance.product_id = self.object.id
+        form.instance.product = Product.objects.get(slug=self.kwargs['slug'])
         form.save()
         return super().form_valid(form)
 
-    def form_invalid(self, form):
-        self.object = self.get_object()
-        print(form.errors)
-        return super().form_invalid(form)
+
+class CommentAdd(ListCreateAPIView):
+    serializer_class = CommentSerializer
+    queryset = Comment.objects.all()
+
+    def perform_create(self, serializer):
+
+        product = Product.objects.get(slug=self.kwargs['slug'])
+        kwargs = {'product': product}
+        if isinstance(self.request.user, User):
+            kwargs['author'] = self.request.user
+        serializer.save(**kwargs)
