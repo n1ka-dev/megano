@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db.models import F
+from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic import ListView, DetailView, FormView
 from rest_framework.generics import ListCreateAPIView
@@ -33,9 +34,9 @@ class ProductDetailView(DetailView, FormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context['comment'] = Comment.objects.filter(product__slug=self.kwargs['slug']).select_related('author') \
+        context['comments'] = Comment.objects.filter(product__slug=self.kwargs['slug']).select_related('author') \
             .annotate(username=F('author__username')).filter(status='p').order_by('-id')
-        context['comment_count'] = len(context['comment'])
+        context['count_comments'] = len(context['comments'])
         return context
 
     def get_success_url(self):
@@ -62,9 +63,21 @@ class CommentAdd(ListCreateAPIView):
     queryset = Comment.objects.all()
 
     def perform_create(self, serializer):
-
         product = Product.objects.get(slug=self.kwargs['slug'])
         kwargs = {'product': product}
         if isinstance(self.request.user, User):
             kwargs['author'] = self.request.user
         serializer.save(**kwargs)
+
+
+def comments_list(request, slug):
+    comments = Comment.objects.filter(product__slug=slug).order_by('-id')
+    response = render(
+        request,
+        'comments_product.html',
+        {
+            'comments': comments
+        }
+    )
+
+    return response

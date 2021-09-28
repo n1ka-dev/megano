@@ -13,23 +13,3 @@ function getCookie(name) {
     }
     return cookieValue;
 }
-$(document).ready(function (){
-     $(".Tabs-addComment form").submit(function(e){
-         e.preventDefault()
-          $.ajax({
-              type: 'POST',
-              data: $(this).serialize(),
-              url: "add_comment/",
-              headers: {
-                        'X-CSRFToken':getCookie('csrftoken')
-                    },
-              success: function (response) {
-                  $('.msg').text('Комментарий успешно опубликован');
-              },
-               error: function (res) {
-                       console.log(res);
-                       $('.msg').text(res.responseText);
-                      }
-          });
-     });
-})

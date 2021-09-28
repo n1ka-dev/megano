@@ -1,0 +1,27 @@
+{% for comment in comments %}
+  <div class="Comment">
+        <div class="Comment-column Comment-column_pict">
+          <div class="Comment-avatar">
+          </div>
+        </div>
+        <div class="Comment-column">
+          <header class="Comment-header">
+            <div>
+              <strong class="Comment-title">
+                {% if comment.author_id %}
+                    {{ comment.author.username }}
+                {% else %}
+                    Гость {{ comment.nickname }}
+                {% endif %}
+              </strong>
+                <span class="Comment-date">
+                    {{ comment.create_date }}
+                </span>
+            </div>
+          </header>
+          <div class="Comment-content">
+              {{ comment.text }}
+          </div>
+        </div>
+      </div>
+{% endfor %}
