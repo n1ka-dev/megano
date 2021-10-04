@@ -1,6 +1,6 @@
 from django.urls import path
 
-from shop.views import CatalogView, ProductDetailView, CommentAdd, comments_list
+from app_shop.views import CatalogView, ProductDetailView, CommentAdd, comments_list
 
 urlpatterns = [
     path('', CatalogView.as_view(), name='catalog'),

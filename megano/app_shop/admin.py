@@ -1,5 +1,5 @@
 from django.contrib import admin
-from shop.models import Product, Category, Image, Tags, Properties, Comment
+from app_shop.models import Product, Category, Image, Tags, Properties, Comment
 
 
 class PropertiesTabular(admin.TabularInline):

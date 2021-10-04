@@ -56,6 +56,11 @@ class Properties(models.Model):
     value = models.CharField(max_length=250, verbose_name=_('value'))
     product = models.ForeignKey('Product', on_delete=models.CASCADE)
 
+    class Meta:
+        db_table = 'props'
+        verbose_name = _('property')
+        verbose_name_plural = _('properties')
+
 
 class Product(models.Model):
     name = models.CharField(max_length=250, verbose_name=_('name'))
@@ -83,6 +88,9 @@ class Product(models.Model):
         db_table = 'product'
         verbose_name = _('product')
         verbose_name_plural = _('products')
+        indexes = [
+            models.Index(fields=['name', 'slug']),
+        ]
 
     def __str__(self):
         return self.name

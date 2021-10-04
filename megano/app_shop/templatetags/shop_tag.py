@@ -2,7 +2,7 @@ from django import template
 from django.db.models import Sum, F
 from django.utils.safestring import mark_safe
 
-from shop.models import Category
+from app_shop.models import Category
 
 register = template.Library()
 

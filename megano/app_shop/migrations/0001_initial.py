@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
                 ('slug', models.SlugField(max_length=250, unique=True, verbose_name='slug')),
                 ('image', models.FileField(blank=True, null=True, upload_to='uploads/images/')),
                 ('desc', models.TextField(blank=True, null=True, verbose_name='description')),
-                ('parent_category', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='shop.category', verbose_name='parent category')),
+                ('parent_category', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='app_shop.category', verbose_name='parent category')),
             ],
             options={
                 'verbose_name': 'category',
@@ -57,9 +57,9 @@ class Migration(migrations.Migration):
                 ('price', models.DecimalField(decimal_places=2, max_digits=7)),
                 ('promotion', models.BooleanField(default=False, verbose_name='promotion')),
                 ('stock_balance', models.IntegerField(default=0, verbose_name='stock balance')),
-                ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='shop.category')),
+                ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='app_shop.category')),
                 ('created_by', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
-                ('images', models.ManyToManyField(to='shop.Image', verbose_name='images')),
+                ('images', models.ManyToManyField(to='app_shop.Image', verbose_name='images')),
             ],
             options={
                 'verbose_name': 'goods',

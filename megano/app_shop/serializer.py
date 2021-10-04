@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 
-from shop.models import Comment, Product
+from app_shop.models import Comment, Product
 
 
 class CommentSerializer(serializers.ModelSerializer):

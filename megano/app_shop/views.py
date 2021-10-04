@@ -5,9 +5,9 @@ from django.urls import reverse
 from django.views.generic import ListView, DetailView, FormView
 from rest_framework.generics import ListCreateAPIView
 
-from shop.models import Product, Comment
-from shop.forms import CommentForm
-from shop.serializer import CommentSerializer
+from app_shop.models import Product, Comment
+from app_shop.forms import CommentForm
+from app_shop.serializer import CommentSerializer
 
 
 class CatalogView(ListView):
@@ -44,9 +44,6 @@ class ProductDetailView(DetailView, FormView):
 
     def get_form(self, form_class=None):
         form = super(ProductDetailView, self).get_form(form_class)
-        if self.request.user.is_authenticated:
-            form.fields.pop('nickname')
-            form.fields.pop('email')
 
         return form
 
