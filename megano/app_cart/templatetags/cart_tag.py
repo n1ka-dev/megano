@@ -15,7 +15,7 @@ def get_total_price_cart(context, *args, **kwargs):
     session = context.request.session
     cart = session.get(settings.CART_SESSION_ID)
     return sum(float(item['price']) * item['quantity'] for item in
-               cart.values())
+               cart.values()) if cart else 0.0
 
 
 @register.simple_tag(takes_context=True)
@@ -25,5 +25,5 @@ def get_count_position_cart(context, *args, **kwargs):
     """
     session = context.request.session
     cart = session.get(settings.CART_SESSION_ID)
-    print(session)
-    return len(cart)
+
+    return len(cart) if cart else 0
