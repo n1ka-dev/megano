@@ -27,5 +27,7 @@ urlpatterns = [
                   path('', MainView.as_view(), name="main"),
                   path('__debug__/', include(debug_toolbar.urls)),
                   path('admin/', admin.site.urls),
-                  path('catalog/', include('shop.urls')),
+                  path('catalog/', include('app_shop.urls')),
+                  path('cart/', include('app_cart.urls')),
+                  path('', include('app_users.urls')),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

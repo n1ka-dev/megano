@@ -8,11 +8,7 @@
           <header class="Comment-header">
             <div>
               <strong class="Comment-title">
-                {% if comment.author_id %}
-                    {{ comment.author.username }}
-                {% else %}
-                    Гость {{ comment.nickname }}
-                {% endif %}
+                  {{ comment.nickname }}
               </strong>
                 <span class="Comment-date">
                     {{ comment.create_date }}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}Sign in{% endblock %}
+{% block breadcrumbs %}
+    <nav aria-label="breadcrumb">
+         <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'main' %}">{% trans 'Home' %}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{% trans 'Sign in' %}</li>
+         </ol>
+    </nav>
+{% endblock %}
+{% block h1 %}{% trans 'Sign in' %}{% endblock %}
+{% block content %}
+<div class="Middle Middle_top">
+    <div class="Middle-top">
+        <div class="wrap">
+            <div class="Middle-header">
+              <h1 class="Middle-title">Log in</h1>
+              <ul class="breadcrumbs Middle-breadcrumbs">
+                <li class="breadcrumbs-item"><a href="{% url 'main' %}">home</a>
+                </li>
+                <li class="breadcrumbs-item breadcrumbs-item_current"><span>Log in</span>
+                </li>
+              </ul>
+            </div>
+        </div>
+    </div>
+     <div class="Section">
+         <div class="wrap d-flex justify-content-center">
+            <form class="auth-form" role="form" method="post">
+                {% csrf_token %}
+                {{ form.as_p}}
+                <input class="btn btn_primary col-12" type="submit" value="{% trans 'Sign in' %}">
+                <p class="mt-3">{% trans 'Not registered?' %} <a href="{% url 'register' %}">{% trans 'Sign up' %}</a></p>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -570,6 +570,12 @@ textarea {
   background: transparent;
   color: #0063d1;
 }
+.message-box{text-align: center}
+.auth-form{width: 350px; text-align: center; margin: auto}
+.auth-form input{display: block; width: 100%}
+.mt-3{
+    margin-top: 30px;
+}
 @media screen and (min-width: 990px) {
   .btn_primary:hover {
     transition: all 200ms;

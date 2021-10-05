@@ -56,12 +56,14 @@
                   <div class="Amount Amount_product">
                     <button class="Amount-remove" type="button">
                     </button>
-                    <input class="Amount-input form-input" name="amount" type="text" value="1"/>
+                    <input class="Amount-input form-input" name="amount" type="text" data-id="{{ product.id }}" value="1"/>
                     <button class="Amount-add" type="button">
                     </button>
                   </div>
                 </div>
-                <div class="ProductCard-cartElement"><a class="btn btn_primary" href="#"><img class="btn-icon" src="{%  static '/img/icons/card/cart_white.svg' %}" alt="cart_white.svg"/><span class="btn-content">Add To Cart</span></a>
+                <div class="ProductCard-cartElement">
+                    <a class="btn btn_primary" href="#"><img class="btn-icon" src="{%  static '/img/icons/card/cart_white.svg' %}" alt="cart_white.svg"/><span class="btn-content">Add To Cart</span></a>
+                    <div class="message-box"></div>
                 </div>
               </div>
               <div class="ProductCard-footer">
@@ -103,31 +105,37 @@
                 <div class="Comments" id="comments-list">
                     {% include 'comments_product.html' %}
                 </div>
-                <header class="Section-header Section-header_product">
-                  <h3 class="Section-title">Add Review</h3>
-                </header>
-                <div class="Tabs-addComment">
-                     <form method="post" action="{% url 'product-detail' product.slug %}" class="form" id="add-comment">
-                        {% csrf_token %}
-                         <div class="form-group">
-                            {{ form.text }}
-                        </div>
-                        <div class="form-group">
-                          <div class="row">
-                            <div class="row-block">
-                                {{ form.nickname }}
+                  {% if request.user.is_authenticated %}
+                    <header class="Section-header Section-header_product">
+                      <h3 class="Section-title">Add Review</h3>
+                    </header>
+                    <div class="Tabs-addComment">
+                         <form method="post" action="{% url 'product-detail' product.slug %}" class="form" id="add-comment">
+                            {% csrf_token %}
+                             <div class="form-group">
+                                {{ form.text }}
                             </div>
-                            <div class="row-block">
-                                {{ form.email }}
+                            <div class="form-group">
+                              <div class="row">
+                                <div class="row-block">
+                                    {{ form.nickname }}
+                                </div>
+                                <div class="row-block">
+                                    {{ form.email }}
+                                </div>
+                              </div>
                             </div>
-                          </div>
-                        </div>
-                         <div class="form-group">
-                            <button type="submit" class="btn btn_muted">{% trans 'Опубликовать' %}</button>
-                        </div>
-                    </form>
-                    <div class="msg"> {{ form.errors }}</div>
-                </div>
+                             <div class="form-group">
+                                <button type="submit" class="btn btn_muted">{% trans 'Submit review' %}</button>
+                            </div>
+                        </form>
+                        <div class="msg"> {{ form.errors }}</div>
+                    </div>
+                  {% else %}
+                     <header class="Section-header Section-header_product">
+                         <h3 class="Section-title"><a href="#">{% trans 'Log in' %}</a>, {% trans 'to leave a comment' %}</h3>
+                    </header>
+                  {% endif %}
               </div>
             </div>
           </div>

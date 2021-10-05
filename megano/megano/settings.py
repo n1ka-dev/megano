@@ -40,7 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'debug_toolbar',
-    'shop',
+    'app_shop',
+    'app_cart',
+    'app_users',
 ]
 
 MIDDLEWARE = [
@@ -132,3 +134,4 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 django_heroku.settings(locals())
+CART_SESSION_ID = 'cart'
