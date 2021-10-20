@@ -1,73 +1,42 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import get_object_or_404
-from django.template import RequestContext
-from django.urls import reverse_lazy
-from django.views.decorators.http import require_POST
-from django.views.generic import ListView
-
+from django.shortcuts import get_object_or_404, render
 from django.utils.translation import gettext_lazy as _
-from app_cart.models import Cart
+from app_cart.templatetags.cart_tag import get_total_price_cart, get_count_position_cart, CartService
 from app_shop.models import Product
-from megano import settings
+
+TYPE_OPERATION_ADD = 'add'
+TYPE_OPERATION_REMOVE = 'remove'
+TYPE_OPERATION_SET = 'remove'
 
 
-@require_POST
-def cart_add(request, product_id):
+def cart_update(request, product_id):
     cart = CartService(request)
     product = get_object_or_404(Product, id=product_id)
-    count = request.POST.get('count')
-    cart.add(product=product,
-             count=count)
-    return HttpResponse(JsonResponse({'status': 'sucess', "code": 200, 'message': _('Successfully added')}))
-
-
-class CartService:
-    def __init__(self, request):
-        self.session = request.session
-        cart = self.session.get(settings.CART_SESSION_ID)
-        if not cart:
-            # save an empty cart in the session
-            cart = self.session[settings.CART_SESSION_ID] = {}
-        self.cart = cart
-
-    def add(self, product, count=1, update_quantity=False):
-        """
-        Добавить продукт в корзину или обновить его количество.
-        """
-        product_id = str(product.id)
-        if product_id not in self.cart:
-            self.cart[product_id] = {'quantity': 0,
-                                     'price': str(product.price)}
-        if update_quantity:
-            self.cart[product_id]['quantity'] = float(count)
+    count = request.POST.get('count', 0)
+    count = int(count)
+    if count and request.method == 'POST':
+        update = request.POST.get('update', False)
+        cart.add(product=product, count=count, update_quantity=update)
+        if update:
+            status = _('updated')
         else:
-            self.cart[product_id]['quantity'] += float(count)
-        self.save()
-
-    def save(self):
-        # Обновление сессии cart
-        self.session[settings.CART_SESSION_ID] = self.cart
-        self.session.modified = True
-
-    def __iter__(self):
-        """
-        Перебор элементов в корзине и получение продуктов из базы данных.
-        """
-        product_ids = self.cart.keys()
-        # получение объектов product и добавление их в корзину
-        products = Product.objects.filter(id__in=product_ids)
-        for product in products:
-            self.cart[str(product.id)]['product'] = product
-
-        for item in self.cart.values():
-            item['price'] = float(item['price'])
-            item['total_price'] = item['price'] * item['quantity']
-            yield item
+            status = _('added')
+        return HttpResponse(JsonResponse({'status': 'success', "amount_sum": get_total_price_cart(request),
+                                          "amount_count": get_count_position_cart(request), 'message': _(f'Product {product.name} '
+                                                                                         f'successfully {status}')}))
+    else:
+        cart.remove(product)
+        return HttpResponse(JsonResponse({'status': 'success', "amount_sum": get_total_price_cart(request),
+                                          "amount_count": get_count_position_cart(request), 'message': _(f'Product {product.name} '
+                                                                                         'successfully removed')}))
 
 
-class CartView(LoginRequiredMixin, ListView):
-    model = Cart
-    login_url = reverse_lazy('login')
-    template_name = 'cart.html'
-    context_object_name = 'cart_list'
+def cart_detail(request):
+    cart = CartService(request)
+    return render(request, 'cart.html', {'cart_list': cart})
+
+
+# TODO дублирование кода. подумать как убрать
+def products_in_cart(request):
+    cart = CartService(request)
+    return render(request, 'products_in_cart.html', {'cart_list': cart})

@@ -112,8 +112,8 @@
         <div class="row-block">
           <div class="CartBlock"><a class="CartBlock-block" href="{% url 'cart' %}">
               <img class="CartBlock-img" src="{% static '/img/icons/cart.svg' %}" alt="cart.svg"/>
-              <span class="CartBlock-amount">{% get_count_position_cart %}</span></a>
-            <div class="CartBlock-block"><span class="CartBlock-price">{% get_total_price_cart %}$</span>
+              <span class="CartBlock-amount amount-count">{% get_count_position_cart request %}</span></a>
+            <div class="CartBlock-block"><span class="CartBlock-price"><span class="amount-sum">{% get_total_price_cart request %}</span>$</span>
             </div>
           </div>
         </div>

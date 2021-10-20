@@ -77,7 +77,9 @@
             <div class="Sort-variants"><a class="Sort-sortBy Sort-sortBy_dec" href="#">Популярности</a><a class="Sort-sortBy" href="#">Цене</a><a class="Sort-sortBy" href="#">Отзывам</a><a class="Sort-sortBy Sort-sortBy_inc" href="#">Новизне</a>
             </div>
           </div>
+          <div class="message-box"></div>
           <div class="Cards">
+
               {% for product in catalog%}
             <div class="Card">
                 <a class="Card-picture" href="{% url 'product-detail' product.slug %}"">
@@ -93,7 +95,7 @@
                   </div>
                   <div class="Card-category">{{ product.get_tags_str }}
                   </div>
-                  <div class="Card-hover"><a class="Card-btn" href="#"><img src="{% static '/img/icons/card/cart.svg' %}" alt="cart.svg"/></a>
+                  <div class="Card-hover"><a class="Card-btn" data-id="{{ product.id }}" href="#"><img src="{% static '/img/icons/card/cart.svg' %}" alt="cart.svg"/></a>
                   </div>
                 </div>
               </div>

@@ -1,29 +1,24 @@
 from django import template
-from django.db.models import Sum, F
-from django.utils.safestring import mark_safe
-from app_cart.models import Cart
-from megano import settings
+
+from app_cart.CartService import CartService
 
 register = template.Library()
 
 
-@register.simple_tag(takes_context=True)
-def get_total_price_cart(context, *args, **kwargs):
+@register.simple_tag()
+def get_total_price_cart(request, *args, **kwargs):
     """
     Подсчет стоимости товаров в корзине.
     """
-    session = context.request.session
-    cart = session.get(settings.CART_SESSION_ID)
-    return sum(float(item['price']) * item['quantity'] for item in
-               cart.values()) if cart else 0.0
+    cart = CartService(request)
+    return cart.get_sum()
 
 
-@register.simple_tag(takes_context=True)
-def get_count_position_cart(context, *args, **kwargs):
+@register.simple_tag()
+def get_count_position_cart(request, *args, **kwargs):
     """
     Подсчет товаров в корзине.
     """
-    session = context.request.session
-    cart = session.get(settings.CART_SESSION_ID)
+    cart = CartService(request)
 
-    return len(cart) if cart else 0
+    return cart.get_count()

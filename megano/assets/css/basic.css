@@ -501,6 +501,15 @@ textarea {
   background: transparent;
   color: #fff;
 }
+.message-error,.message-success {
+    border: 1px solid;
+    font-size: 18px;
+    padding: 15px;
+    display: inline-block;
+    margin: 15px;
+}
+.message-success{border-color:  #3cb878;}
+.message-error{border-color:  #fb614f;}
 @media screen and (min-width: 990px) {
   .btn_default:hover {
     transition: all 200ms;
