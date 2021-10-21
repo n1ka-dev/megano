@@ -1,0 +1,53 @@
+{% load i18n %}
+{% load static %}
+{% load cart_tag %}
+{% if cart_list  %}
+    <form class="form Cart" action="#" method="post">
+        {% for item in cart_list %}
+        <div class="Cart-product">
+            <div class="Cart-block Cart-block_row">
+              <div class="Cart-block Cart-block_pict">
+                  <a class="Cart-pict" href="{% url 'product-detail' item.product.slug %}">
+                    {% for img in item.product.images.all|slice:"0:1"%}
+                        <img src="{{ img.image.url }}" alt="{{ img.image.alt }}" width="150"/>
+                    {% endfor %}
+                  </a>
+              </div>
+              <div class="Cart-block Cart-block_info">
+                  <a class="Cart-title" href="{% url 'product-detail' item.product.slug %}">{{ item.product.name }}</a>
+                <div class="Cart-desc">{{ item.product.short_description }}</div>
+              </div>
+              <div class="Cart-block Cart-block_price">
+                <div class="Cart-price">{{ item.product.price }}$</div>
+              </div>
+            </div>
+            <div class="Cart-block Cart-block_row">
+              <div class="Cart-block Cart-block_amount">
+                <div class="Cart-amount">
+                  <div class="Amount">
+                    <button class="Amount-remove" type="button">
+                    </button>
+                    <input class="Amount-input form-input" name="amount" type="text" data-id="{{ item.product.id }}" value="{{ item.quantity }}"/>
+                    <button class="Amount-add" type="button">
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="Cart-block Cart-block_delete">
+                  <a class="Cart-delete" href="#"><img src="{% static 'img/icons/card/delete.svg' %}" alt="delete.svg"/></a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+         <div class="Cart-total">
+            <div class="Cart-block Cart-block_total">
+                <strong class="Cart-title">Итого:</strong>
+                <span class="Cart-price"><span class="amount-sum">{% get_total_price_cart request %}</span>$</span>
+            </div>
+            <div class="Cart-block"><a class="btn btn_success btn_lg" href="{% url 'checkout'%}">Оформить заказ</a>
+            </div>
+          </div>
+    </form>
+{% else %}
+     {% trans 'Cart is empty' %}
+{% endif %}

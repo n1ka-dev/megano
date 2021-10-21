@@ -88,14 +88,14 @@ $(document).ready(function(){
 
 
     /* Добавление товара */
-    $('.Amount-remove, .Amount-add').click(function(e){
+    $('#cart-area .Amount-remove, #cart-area .Amount-add').click(function(e){
         e.preventDefault();
         let id_product = $(this).parent().find('[name="amount"]').data('id');
         let qty = $(this).parent().find('[name="amount"]').val();
         cart_update(id_product, {'count': qty, 'update': true});
 
      });
-    $('.Amount-input').change(function(e){
+    $('#cart-area .Amount-input').change(function(e){
         e.preventDefault();
 
         let id_product = $(this).data('id');
