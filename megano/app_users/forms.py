@@ -11,22 +11,17 @@ class AuthForm(AuthenticationForm):
 
 
 class RegisterForm(UserCreationForm):
-    avatar = forms.FileField(label='Аватар', required=False, )
+    first_name = forms.CharField(label='ФИО', max_length=30, widget=forms.TextInput(attrs={'placeholder': 'ФИО', 'class': 'form-input'}))
 
-    first_name = forms.CharField(label='Имя', max_length=30, widget=forms.TextInput(attrs={'placeholder': 'Имя'}))
-    last_name = forms.CharField(label='Фамилия', max_length=30,
-                                widget=forms.TextInput(attrs={'placeholder': 'Фамилия'}))
-    city = forms.CharField(label='Город', max_length=30, required=False,
-                           widget=forms.TextInput(attrs={'placeholder': 'Город'}))
     phone = forms.CharField(label='Телефон', max_length=30, required=False,
-                            widget=forms.TextInput(attrs={'placeholder': 'Телефон'}))
-    username = forms.CharField(label='Логин', max_length=30,
-                               widget=forms.TextInput(attrs={'placeholder': 'Логин'}))
+                            widget=forms.TextInput(attrs={'placeholder': 'Телефон', 'class': 'form-input'}))
+    username = forms.CharField(label='E-mail', max_length=30,
+                               widget=forms.TextInput(attrs={'placeholder': 'E-mail', 'class': 'form-input'}))
     password1 = forms.CharField(label='Пароль', max_length=30,
-                                widget=forms.PasswordInput(attrs={'placeholder': 'Пароль'}))
-    password2 = forms.CharField(label='Повторите пароль', max_length=30,
-                                widget=forms.PasswordInput(attrs={'placeholder': 'Пароль'}))
+                                widget=forms.PasswordInput(attrs={'placeholder': 'Тут можно изменить пароль', 'class': 'form-input'}))
+    password2 = forms.CharField(label='Подтверждение пароля', max_length=30,
+                                widget=forms.PasswordInput(attrs={'placeholder': 'Введите пароль повторно', 'class': 'form-input'}))
 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'password1', 'password2')
+        fields = ('username', 'first_name', 'password1', 'password2')

@@ -6,6 +6,11 @@ from pytils.translit import slugify
 from django.utils.translation import gettext_lazy as _
 
 
+class SettingsSite(models.Model):
+    name = models.CharField(max_length=250, verbose_name=_('name'))
+    value = models.CharField(max_length=250, verbose_name=_('value'))
+
+
 class Category(models.Model):
     name = models.CharField(max_length=250, verbose_name=_('name'))
     slug = models.SlugField(max_length=250, verbose_name=_('slug'), blank=True, unique=True)

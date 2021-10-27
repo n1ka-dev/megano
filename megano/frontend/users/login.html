@@ -27,11 +27,9 @@
     </div>
      <div class="Section">
          <div class="wrap d-flex justify-content-center">
-            <form class="auth-form" role="form" method="post">
-                {% csrf_token %}
-                {{ form.as_p}}
-                <input class="btn btn_primary col-12" type="submit" value="{% trans 'Sign in' %}">
-                <p class="mt-3">{% trans 'Not registered?' %} <a href="{% url 'register' %}">{% trans 'Sign up' %}</a></p>
+                 {% include 'checkout/auth_step.html' %}
+                </div><!--row end -->
+             </div> <!-- row-block end -->
             </form>
         </div>
     </div>

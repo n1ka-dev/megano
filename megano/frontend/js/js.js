@@ -107,6 +107,9 @@ $(document).ready(function(){
             $(this).val(0)
         }
      });
+    $('.submit-register').click(function(e){
+        $('#Register-form').submit();
+    })
 
 
 });

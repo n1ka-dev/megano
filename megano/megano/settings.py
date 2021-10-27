@@ -103,6 +103,15 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+DELIVERY_PRICE_PROPERTY_NAME = 'delivery_price'
+MIN_AMOUNT_TO_FREE_DELIVERY_PROPERTY_NAME = 'min_amount_to_free_delivery'
+
+INITIAL_PROPS = {
+    DELIVERY_PRICE_PROPERTY_NAME   : 200,
+    MIN_AMOUNT_TO_FREE_DELIVERY_PROPERTY_NAME   : 2000,
+}
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 

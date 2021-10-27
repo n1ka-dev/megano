@@ -673,7 +673,9 @@ var Amount = function(){
     };
 };
 Amount().init();
+console.log('test');
 var Order = function(){
+
     var $next = $('.Order-next'),
         $blocks = $('.Order-block'),
         $navigate = $('.Order-navigate');

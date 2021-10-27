@@ -57,12 +57,16 @@
 				</div>
 			</div>
 			<div class="Section-content">
-				<form class="form" action="#" method="post">
-					<div class="Order-block Order-block_OPEN" id="step1">
-						<header class="Section-header Section-header_sm">
-							<h2 class="Section-title">{% trans 'Step 1. User parameters' %}</h2>
-						</header>
-						<div class="row"> {% if request.user.is_authenticated %} {% include 'checkout/first_step_user_params.html' %} {% else %} {% include 'checkout/auth_regs_step.html' %} {% endif %} </div>
+                {% if request.user.is_authenticated %}
+                    {% include 'checkout/first_step_user_params.html' %}
+                {% elif request.GET.already_register  %}
+                    {% include 'checkout/auth_step.html' %}
+                {% else  %}
+                    {% include 'checkout/regs_step.html' %}
+                {% endif %}
+
+
+
 						<div class="Order-block" id="step2">
 							<header class="Section-header Section-header_sm">
 								<h2 class="Section-title">Шаг 2. Способ доставки </h2>
@@ -71,14 +75,14 @@
 								<div>
 									<label class="toggle">
 										<input type="radio" name="delivery" value="ordinary" checked="checked"/>
-										<span class="toggle-box"/>
+										<span class="toggle-box"/></span>
 										<span class="toggle-text">Обычная доставка</span>
 									</label>
 								</div>
 								<div>
 									<label class="toggle">
 										<input type="radio" name="delivery" value="express"/>
-										<span class="toggle-box"/>
+										<span class="toggle-box"/></span>
 										<span class="toggle-text">Экспресс доставка</span>
 									</label>
 								</div>
@@ -89,7 +93,7 @@
 							</div>
 							<div class="form-group">
 								<label class="form-label" for="address">Адрес </label>
-								<textarea class="form-textarea" name="address" id="address"/>
+								<textarea class="form-textarea" name="address" id="address"></textarea>
 							</div>
 							<div class="Order-footer">
 								<a class="btn btn_success Order-next" href="#step3">Дальше</a>
@@ -103,14 +107,14 @@
 								<div>
 									<label class="toggle">
 										<input type="radio" name="pay" value="online" checked="checked"/>
-										<span class="toggle-box"/>
+										<span class="toggle-box"/></span>
 										<span class="toggle-text">Онлайн картой</span>
 									</label>
 								</div>
 								<div>
 									<label class="toggle">
 										<input type="radio" name="pay" value="someone"/>
-										<span class="toggle-box"/>
+										<span class="toggle-box"/></span>
 										<span class="toggle-text">Онлайн со случайного чужого счета</span>
 									</label>
 								</div>

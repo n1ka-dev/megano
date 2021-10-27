@@ -6,6 +6,7 @@ from app_shop.models import Product
 from django.views.generic import FormView, TemplateView
 
 from app_cart.forms import CheckoutForm
+from app_users.forms import RegisterForm, AuthForm
 
 TYPE_OPERATION_ADD = 'add'
 TYPE_OPERATION_REMOVE = 'remove'
@@ -48,5 +49,13 @@ def products_in_cart(request):
 
 
 class CheckoutView(TemplateView, FormView):
-    form_class = CheckoutForm
+
     template_name = 'checkout.html'
+
+    def get_form_class(self):
+        if self.request.user.is_authenticated:
+            return CheckoutForm
+        elif self.request.GET.get('already_register', False):
+            return AuthForm
+        else:
+            return RegisterForm

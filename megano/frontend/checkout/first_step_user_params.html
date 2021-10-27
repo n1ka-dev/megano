@@ -1,16 +1,24 @@
- <div class="row-block">
-    <div class="form-group">
-      <label class="form-label" for="name">ФИО</label>
-      <input class="form-input" id="name" name="name" type="text" value="{{ request.user.last_name }} {{ request.user.first_name }}"/>
+{% load i18n %}
+<form class="form" action="#" method="post">
+    <div class="Order-block Order-block_OPEN" id="step1">
+        <header class="Section-header Section-header_sm">
+            <h2 class="Section-title">{% trans 'Step 1. User parameters' %}</h2>
+        </header>
+        <div class="row"><!---start--->
+         <div class="row-block">
+            <div class="form-group">
+              <label class="form-label" for="name">ФИО</label>
+              <input class="form-input" id="name" name="name" type="text" value="{{ request.user.last_name }} {{ request.user.first_name }}"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="phone">Телефон</label>
+              <input class="form-input" id="phone" name="phone" type="text" value="{{ request.user.profile.phone }}"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="mail">E-mail</label>
+              <input class="form-input" id="mail" name="mail" type="text" value="{{ request.user.username }}" data-validate="require"/>
+            </div>
+          </div>
+        </div>
+        <div class="Order-footer"><a class="btn btn_success Order-next" href="#step2">Дальше</a></div>
     </div>
-    <div class="form-group">
-      <label class="form-label" for="phone">Телефон</label>
-      <input class="form-input" id="phone" name="phone" type="text" value="{{ request.user.profile.phone }}"/>
-    </div>
-    <div class="form-group">
-      <label class="form-label" for="mail">E-mail</label>
-      <input class="form-input" id="mail" name="mail" type="text" value="{{ request.user.email }}" data-validate="require"/>
-    </div>
-  </div>
-</div>
-<div class="Order-footer"><a class="btn btn_success Order-next" href="#step2">Дальше</a></div>

@@ -1,0 +1,34 @@
+{% load i18n %}
+<form class="form" action="{% url 'register' %}" method="post" id="Register-form">
+    {% csrf_token %}
+    <div class="Order-block Order-block_OPEN">
+        <div class="row"><!---start--->
+        <div class="row-block">
+            <div class="form-group">
+                <label class="form-label" for="{{ form.first_name.id_for_label }}" >{{ form.first_name.label }}</label>
+                {{ form.first_name }}
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="{{ form.phone.id_for_label }}" >{{ form.phone.label }}</label>
+              {{ form.phone }}
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="mail">E-mail</label>
+              {{ form.username }}
+            </div>
+          </div>
+          <div class="row-block">
+            <div class="form-group">
+              <label class="form-label" for="{{ form.password1.id_for_label }}" >{{ form.password1.label }}</label>
+                {{ form.password1 }}
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="{{ form.password2.id_for_label }}" >{{ form.password2.label }}</label>
+                {{ form.password2 }}
+            </div>
+            <div class="form-group"><a class="btn btn_muted Order-btnReg" href="?already_register=true">Я уже зарегистрирован</a>
+            </div>
+          </div>
+        </div>
+        <div class="Order-footer"><a class="btn btn_success submit-register" href="#">Регистрация</a></div>
+         {{ form.errors }}
