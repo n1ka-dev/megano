@@ -49,7 +49,6 @@ def products_in_cart(request):
 
 
 class CheckoutView(TemplateView, FormView):
-
     template_name = 'checkout.html'
 
     def get_form_class(self):
@@ -59,3 +58,18 @@ class CheckoutView(TemplateView, FormView):
             return AuthForm
         else:
             return RegisterForm
+
+    def get_form(self, form_class=None):
+        form = super(CheckoutView, self).get_form(form_class)
+        print(form_class)
+        if 'fio' in form.fields:
+            form.fields['fio'].initial = ' '.join([self.request.user.last_name,
+                                                   self.request.user.first_name])
+
+        if 'phone' in form.fields and self.request.user.is_authenticated:
+            form.fields['phone'].initial = self.request.user.profile.phone
+
+        if 'email' in form.fields and self.request.user.is_authenticated:
+            form.fields['email'].initial = self.request.user.email
+
+        return form

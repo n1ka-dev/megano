@@ -21,3 +21,4 @@ class CheckoutForm(forms.Form):
                             error_messages={'required': _('Enter your phone')})
     email = forms.CharField(max_length=50, label='Email', widget=forms.TextInput(attrs={'class': 'form-input'}),
                             error_messages={'required': _('Enter your email address')})
+

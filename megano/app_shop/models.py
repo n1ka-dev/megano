@@ -10,6 +10,11 @@ class SettingsSite(models.Model):
     name = models.CharField(max_length=250, verbose_name=_('name'))
     value = models.CharField(max_length=250, verbose_name=_('value'))
 
+    class Meta:
+        db_table = 'settings'
+        verbose_name = _('settings')
+        verbose_name_plural = _('settings')
+
 
 class Category(models.Model):
     name = models.CharField(max_length=250, verbose_name=_('name'))
@@ -136,4 +141,3 @@ class Comment(models.Model):
         return f'{self.text[:15]}...' if len(self.text) > 15 else self.text
 
     short_comment.short_description = _('short description')
-

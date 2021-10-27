@@ -2,16 +2,6 @@
 
 from django.db import migrations, models
 
-from megano.settings import INITIAL_PROPS
-
-
-def set_initial_props(apps, schema_editor):
-    settings_model = apps.get_model("app_shop", "SettingsSite")
-    for settings_field in settings_model.objects.all():
-        for init_prop_name, init_prop_value in INITIAL_PROPS.items():
-            settings_field.name = init_prop_name
-            settings_field.value = init_prop_value
-            settings_field.save()
 
 
 class Migration(migrations.Migration):
@@ -27,6 +17,5 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=250, verbose_name='name')),
                 ('value', models.CharField(max_length=250, verbose_name='value')),
             ],
-        ),
-        migrations.RunPython(set_initial_props),
+        )
     ]
