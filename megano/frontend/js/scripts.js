@@ -687,6 +687,7 @@ var Order = function(){
                     href = $this.attr('href'),
                     error = false,
                     $validate = $this.closest($blocks).find('[data-validate]')
+                console.log($validate)
                 if ($(e.target).is('.Order-next')) {
                     $validate.each(function(){
                         var $this = $(this);

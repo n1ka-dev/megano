@@ -1,5 +1,5 @@
 from django.contrib import admin
-from app_shop.models import Product, Category, Image, Tags, Properties, Comment, SettingsSite
+from app_shop.models import Product, Category, Image, Tags, Properties, Comment
 
 
 class PropertiesTabular(admin.TabularInline):
@@ -15,13 +15,6 @@ class Product(admin.ModelAdmin):
     inlines = (PropertiesTabular, CommentTabular)
     list_display = ['name', 'short_description', 'price']
     search_fields = ['name', 'short_description']
-
-
-@admin.register(SettingsSite)
-class SettingsSite(admin.ModelAdmin):
-    list_display = ['name', 'value']
-    search_fields = ['name', 'value']
-
 
 @admin.register(Tags)
 class Tags(admin.ModelAdmin):

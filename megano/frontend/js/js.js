@@ -13,6 +13,9 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+function order_html(html){
+    $('.Order-personal>.row').html(html)
+}
 function show_message(message){
     const $item = $('<div class="message">' + message+ '</div>');
     $item.appendTo($('.message-box')).delay(3000).slideUp(200, function(){
@@ -39,6 +42,14 @@ function ajax_request(url, data, success_func, type='POST'){
 }
 
 
+function save_order_info(data){
+    ajax_request(
+            '/cart/save_order_info/',
+            data,
+            function (res){
+                order_html(res.html)
+            });
+}
 function cart_update(id_product, data){
     ajax_request(
             '/cart/update/'+id_product+'/',
@@ -107,6 +118,26 @@ $(document).ready(function(){
             $(this).val(0)
         }
      });
+
+    $('[href="#step4"]').click(function(e){
+        fio = $('[name="fio"]').val()
+        phone = $('[name="phone"]').val()
+        email = $('[name="email"]').val()
+        delivery_method = $('[name="delivery_method"]:checked').val()
+        city = $('[name="city"]').val()
+        address = $('[name="address"]').val()
+        payment_method = $('[name="payment_method"]:checked').val()
+
+        save_order_info( {
+            'fio': fio,
+            'phone': phone,
+            'email': email,
+            'delivery_method': delivery_method,
+            'city': city,
+            'address': address,
+            'payment_method': payment_method,
+        });
+    });
     $('.submit-register').click(function(e){
         $('#Register-form').submit();
     })

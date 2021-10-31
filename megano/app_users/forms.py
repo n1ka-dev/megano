@@ -11,17 +11,11 @@ class AuthForm(AuthenticationForm):
 
 
 class RegisterForm(UserCreationForm):
-    first_name = forms.CharField(label='ФИО', max_length=30, widget=forms.TextInput(attrs={'placeholder': 'ФИО', 'class': 'form-input'}))
-
-    phone = forms.CharField(label='Телефон', max_length=30, required=False,
-                            widget=forms.TextInput(attrs={'placeholder': 'Телефон', 'class': 'form-input'}))
-    username = forms.CharField(label='E-mail', max_length=30,
-                               widget=forms.TextInput(attrs={'placeholder': 'E-mail', 'class': 'form-input'}))
-    password1 = forms.CharField(label='Пароль', max_length=30,
-                                widget=forms.PasswordInput(attrs={'placeholder': 'Тут можно изменить пароль', 'class': 'form-input'}))
-    password2 = forms.CharField(label='Подтверждение пароля', max_length=30,
-                                widget=forms.PasswordInput(attrs={'placeholder': 'Введите пароль повторно', 'class': 'form-input'}))
-
-    class Meta:
-        model = User
-        fields = ('username', 'first_name', 'password1', 'password2')
+    fio = forms.CharField(max_length=50, label=_('FIO'), widget=forms.TextInput(attrs={'class': 'form-input'}),
+                          error_messages={'required': _('Enter your Name')})
+    phone = forms.CharField(max_length=50, label=_('Phone'), widget=forms.TextInput(attrs={'class': 'form-input'}),
+                            error_messages={'required': _('Enter your phone')})
+    email = forms.CharField(max_length=50, label='Email', widget=forms.TextInput(attrs={'class': 'form-input'}),
+                            error_messages={'required': _('Enter your email address')})
+    password = forms.CharField(widget=forms.PasswordInput, label=_('Password'))
+    confirm_password = forms.CharField(widget=forms.PasswordInput(), label=_('Confirm password'))

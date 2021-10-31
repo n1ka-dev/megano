@@ -1,6 +1,8 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.utils.translation import gettext_lazy as _
+
+from app_cart.OrderService import OrderService
 from app_cart.templatetags.cart_tag import get_total_price_cart, get_count_position_cart, CartService
 from app_shop.models import Product
 from django.views.generic import FormView, TemplateView
@@ -11,6 +13,32 @@ from app_users.forms import RegisterForm, AuthForm
 TYPE_OPERATION_ADD = 'add'
 TYPE_OPERATION_REMOVE = 'remove'
 TYPE_OPERATION_SET = 'remove'
+
+
+def save_order_info(request):
+    fio = request.POST.get('fio', False)
+    phone = request.POST.get('phone', False)
+    address = request.POST.get('address', False)
+    city = request.POST.get('city', False)
+    payment_method = request.POST.get('payment_method', False)
+    delivery_method = request.POST.get('delivery_method', False)
+    data = {
+        'f-row': {
+            'fio': fio,
+            'phone': phone,
+            'address': address
+        },
+        's-row': {
+            'city': city,
+            'payment_method': payment_method,
+            'delivery_method': delivery_method,
+        }
+    }
+    order = OrderService(request)
+    order.save(data)
+    return HttpResponse(JsonResponse({'status': 'success',
+                                      'html': order.get_html(),
+                                      'message': _(f'order info saved')}))
 
 
 def cart_update(request, product_id):
@@ -61,7 +89,6 @@ class CheckoutView(TemplateView, FormView):
 
     def get_form(self, form_class=None):
         form = super(CheckoutView, self).get_form(form_class)
-        print(form_class)
         if 'fio' in form.fields:
             form.fields['fio'].initial = ' '.join([self.request.user.last_name,
                                                    self.request.user.first_name])

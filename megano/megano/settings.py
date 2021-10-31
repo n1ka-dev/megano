@@ -103,14 +103,16 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-DELIVERY_PRICE_PROPERTY_NAME = 'delivery_price'
+FREE_DELIVERY_PROPERTY_NAME = 'free_price'
+CUSTOM_DELIVERY_PROPERTY_NAME = 'delivery_price'
+EXPRESS_DELIVERY_PROPERTY_NAME = 'delivery_express_price'
 MIN_AMOUNT_TO_FREE_DELIVERY_PROPERTY_NAME = 'min_amount_to_free_delivery'
 
-INITIAL_PROPS = {
-    DELIVERY_PRICE_PROPERTY_NAME   : 200,
-    MIN_AMOUNT_TO_FREE_DELIVERY_PROPERTY_NAME   : 2000,
+INITIAL_DELIVERY = {
+    CUSTOM_DELIVERY_PROPERTY_NAME: {'name': 'Custom', 'price': 200, 'rules': 'max_cart_price:2000;'},
+    EXPRESS_DELIVERY_PROPERTY_NAME: {'name': 'Express', 'price': 500, 'rules': None},
+    FREE_DELIVERY_PROPERTY_NAME: {'name': 'Free', 'price': 0, 'rules': 'min_cart_price:2000;'},
 }
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
@@ -144,3 +146,4 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 django_heroku.settings(locals())
 CART_SESSION_ID = 'cart'
+ORDER_SESSION_ID = 'order'

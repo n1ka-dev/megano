@@ -5,11 +5,13 @@ from megano.settings import INITIAL_DELIVERY
 
 
 def set_initial_props(apps, schema_editor):
-    settings_model = apps.get_model("app_shop", "SettingsSite")
-    for init_prop_name, init_prop_value in INITIAL_DELIVERY.items():
+    settings_model = apps.get_model("app_cart", "DeliveryMethod")
+    for init_prop_name, init_prop in INITIAL_DELIVERY.items():
         settings_model.objects.create(
-            name=init_prop_name,
-            value=init_prop_value
+            code=init_prop_name,
+            display_name=init_prop['name'],
+            price=init_prop['price'],
+            rules=init_prop['rules'],
         )
 
 

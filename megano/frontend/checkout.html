@@ -1,5 +1,6 @@
 {% extends "base.html" %} 
-{% load i18n %} 
+{% load i18n %}
+{% load cart_tag %}
 {% block title %}Cart{% endblock %} 
 {% block breadcrumbs %} 
 <nav aria-label="breadcrumb">
@@ -64,36 +65,20 @@
                 {% else  %}
                     {% include 'checkout/regs_step.html' %}
                 {% endif %}
-
-
-
 						<div class="Order-block" id="step2">
 							<header class="Section-header Section-header_sm">
 								<h2 class="Section-title">Шаг 2. Способ доставки </h2>
 							</header>
 							<div class="form-group">
-								<div>
-									<label class="toggle">
-										<input type="radio" name="delivery" value="ordinary" checked="checked"/>
-										<span class="toggle-box"/></span>
-										<span class="toggle-text">Обычная доставка</span>
-									</label>
-								</div>
-								<div>
-									<label class="toggle">
-										<input type="radio" name="delivery" value="express"/>
-										<span class="toggle-box"/></span>
-										<span class="toggle-text">Экспресс доставка</span>
-									</label>
-								</div>
+                                {{ form.delivery_method }}
 							</div>
 							<div class="form-group">
-								<label class="form-label" for="city">Город </label>
-								<input class="form-input" id="city" name="city" type="text"/>
+                                <label class="form-label" for="{{ form.city.id_for_label }}" >{{ form.city.label }}</label>
+                                {{ form.city }}
 							</div>
 							<div class="form-group">
-								<label class="form-label" for="address">Адрес </label>
-								<textarea class="form-textarea" name="address" id="address"></textarea>
+                                <label class="form-label" for="{{ form.address.id_for_label }}" >{{ form.address.label }}</label>
+                                {{ form.address }}
 							</div>
 							<div class="Order-footer">
 								<a class="btn btn_success Order-next" href="#step3">Дальше</a>
@@ -104,20 +89,7 @@
 								<h2 class="Section-title">Шаг 3. Способ оплаты </h2>
 							</header>
 							<div class="form-group">
-								<div>
-									<label class="toggle">
-										<input type="radio" name="pay" value="online" checked="checked"/>
-										<span class="toggle-box"/></span>
-										<span class="toggle-text">Онлайн картой</span>
-									</label>
-								</div>
-								<div>
-									<label class="toggle">
-										<input type="radio" name="pay" value="someone"/>
-										<span class="toggle-box"/></span>
-										<span class="toggle-text">Онлайн со случайного чужого счета</span>
-									</label>
-								</div>
+								 {{ form.payment_method }}
 							</div>
 							<div class="Order-footer">
 								<a class="btn btn_success Order-next" href="#step4">Дальше</a>
@@ -131,38 +103,7 @@
 							<div class="Order-infoBlock">
 								<div class="Order-personal">
 									<div class="row">
-										<div class="row-block">
-											<div class="Order-info">
-												<div class="Order-infoType">ФИО:</div>
-												<div class="Order-infoContent">Иванов Иван Иванович</div>
-											</div>
-											<div class="Order-info">
-												<div class="Order-infoType">Телефон:</div>
-												<div class="Order-infoContent">+7000000000</div>
-											</div>
-											<div class="Order-info">
-												<div class="Order-infoType">E-mail:</div>
-												<div class="Order-infoContent">send@test.test</div>
-											</div>
-										</div>
-										<div class="row-block">
-											<div class="Order-info Order-info_delivery">
-												<div class="Order-infoType">Тип доставки:</div>
-												<div class="Order-infoContent">Обычная доставка</div>
-											</div>
-											<div class="Order-info">
-												<div class="Order-infoType">Город:</div>
-												<div class="Order-infoContent">Москва</div>
-											</div>
-											<div class="Order-info">
-												<div class="Order-infoType">Адрес:</div>
-												<div class="Order-infoContent">Ул. Академика Арцимовича, д. 10, кв. 10</div>
-											</div>
-											<div class="Order-info Order-info_pay">
-												<div class="Order-infoType">Оплата:</div>
-												<div class="Order-infoContent">Онлайн картой</div>
-											</div>
-										</div>
+
 									</div>
 								</div>
 								<div class="Cart Cart_order">
