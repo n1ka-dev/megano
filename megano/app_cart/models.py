@@ -3,7 +3,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from app_shop.models import Product
-from megano.settings import CUSTOM_DELIVERY_PROPERTY_NAME, EXPRESS_DELIVERY_PROPERTY_NAME, FREE_DELIVERY_PROPERTY_NAME
+from megano.settings import PAYMENT_CHOICES
 
 
 class Cart(models.Model):
@@ -41,6 +41,8 @@ class Orders(models.Model):
     create_date = models.DateTimeField(auto_now_add=True, verbose_name=_('create date'))
     delivery_method = models.ForeignKey(DeliveryMethod, on_delete=models.CASCADE, verbose_name=_('delivery method'),
                                         default=None)
+    payment_method = models.CharField(max_length=50, choices=PAYMENT_CHOICES, default='p', verbose_name=_('payment method'))
+    paid = models.BooleanField(default=False, verbose_name=_('paid'))
 
     class Meta:
         db_table = 'orders'

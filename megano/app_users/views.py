@@ -34,8 +34,10 @@ class SiteRegistrationUserView(FormView):
         return reverse_lazy('main')
 
     def form_valid(self, form):
-        phone = form.cleaned_data.get('phone')
+        form.instance.email = form.cleaned_data.get('username')
+        form.instance.last_name = form.cleaned_data.get('fio')
         user = form.save()
+        phone = form.cleaned_data.get('phone')
 
         Profile.objects.create(
             user=user,

@@ -11,11 +11,20 @@ class AuthForm(AuthenticationForm):
 
 
 class RegisterForm(UserCreationForm):
-    fio = forms.CharField(max_length=50, label=_('FIO'), widget=forms.TextInput(attrs={'class': 'form-input'}),
+    fio = forms.CharField(max_length=50, label=_('FIO'), widget=forms.TextInput(attrs={'class': 'form-input', 'data-validate':'require'}),
                           error_messages={'required': _('Enter your Name')})
-    phone = forms.CharField(max_length=50, label=_('Phone'), widget=forms.TextInput(attrs={'class': 'form-input'}),
+    phone = forms.CharField(max_length=50, label=_('Phone'), widget=forms.TextInput(attrs={'class': 'form-input',  'type': 'tel', 'data-validate':'require'}),
                             error_messages={'required': _('Enter your phone')})
-    email = forms.CharField(max_length=50, label='Email', widget=forms.TextInput(attrs={'class': 'form-input'}),
+
+    username = forms.EmailField(max_length=50, label='Email',  widget=forms.EmailInput(attrs={'class': 'form-input',  'type': 'email', 'data-validate':'require'}),
                             error_messages={'required': _('Enter your email address')})
-    password = forms.CharField(widget=forms.PasswordInput, label=_('Password'))
-    confirm_password = forms.CharField(widget=forms.PasswordInput(), label=_('Confirm password'))
+    password1 = forms.CharField(
+        label="Password",
+        widget=forms.PasswordInput(
+            attrs={'class': 'form-input', 'type': 'password', 'placeholder': 'Тут можно изменить пароль'}),
+    )
+    password2 = forms.CharField(
+        label="Confirm password",
+        widget=forms.PasswordInput(
+            attrs={'class': 'form-input', 'type': 'password', 'placeholder': 'Введите пароль повторно'}),
+    )

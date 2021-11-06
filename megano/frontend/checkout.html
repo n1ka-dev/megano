@@ -107,67 +107,35 @@
 									</div>
 								</div>
 								<div class="Cart Cart_order">
+                                   {% for item in cart_list %}
 									<div class="Cart-product">
 										<div class="Cart-block Cart-block_row">
 											<div class="Cart-block Cart-block_pict">
-												<a class="Cart-pict" href="#">
-													<img class="Cart-img" src="assets/img/content/home/card.jpg" alt="card.jpg"/>
-												</a>
+												 <a class="Cart-pict" href="{% url 'product-detail' item.product.slug %}">
+                                                    {% for img in item.product.images.all|slice:"0:1"%}
+                                                        <img src="{{ img.image.url }}" alt="{{ img.image.alt }}" width="150"/>
+                                                    {% endfor %}
+                                                  </a>
 											</div>
 											<div class="Cart-block Cart-block_info">
-												<a class="Cart-title" href="#">Ноутбук</a>
-												<div class="Cart-desc">Это супер ноутбук, 3 гб. 4 ядра</div>
+												  <a class="Cart-title" href="{% url 'product-detail' item.product.slug %}">{{ item.product.name }}</a>
+                                                  <div class="Cart-desc">{{ item.product.short_description }}</div>
 											</div>
 											<div class="Cart-block Cart-block_price">
-												<div class="Cart-price">80.00$</div>
+												<div class="Cart-price">{{ item.product.price }}$</div>
 											</div>
 										</div>
-										<div class="Cart-block Cart-block_row">
-											<div class="Cart-block Cart-block_amount">1 шт. </div>
-										</div>
+                                        <div class="Cart-block Cart-block_row">
+                                          <div class="Cart-block Cart-block_amount">{{ item.quantity }} шт.
+                                          </div>
+                                        </div>
+
 									</div>
-									<div class="Cart-product">
-										<div class="Cart-block Cart-block_row">
-											<div class="Cart-block Cart-block_pict">
-												<a class="Cart-pict" href="#">
-													<img class="Cart-img" src="assets/img/content/sale/product.png" alt="product.png"/>
-												</a>
-											</div>
-											<div class="Cart-block Cart-block_info">
-												<a class="Cart-title" href="#">Планшет</a>
-												<div class="Cart-desc">Это планшет с современным железом. Процессор последнего поколения</div>
-											</div>
-											<div class="Cart-block Cart-block_price">
-												<div class="Cart-price">40.99$</div>
-											</div>
-										</div>
-										<div class="Cart-block Cart-block_row">
-											<div class="Cart-block Cart-block_amount">1 шт. </div>
-										</div>
-									</div>
-									<div class="Cart-product">
-										<div class="Cart-block Cart-block_row">
-											<div class="Cart-block Cart-block_pict">
-												<a class="Cart-pict" href="#">
-													<img class="Cart-img" src="assets/img/content/home/card.jpg" alt="card.jpg"/>
-												</a>
-											</div>
-											<div class="Cart-block Cart-block_info">
-												<a class="Cart-title" href="#">Ноутбук</a>
-												<div class="Cart-desc">Это супер ноутбук, 3 гб. 4 ядра</div>
-											</div>
-											<div class="Cart-block Cart-block_price">
-												<div class="Cart-price">80.00$</div>
-											</div>
-										</div>
-										<div class="Cart-block Cart-block_row">
-											<div class="Cart-block Cart-block_amount">1 шт.</div>
-										</div>
-									</div>
+                                    {% endfor %}
 									<div class="Cart-total">
 										<div class="Cart-block Cart-block_total">
 											<strong class="Cart-title">Итого: </strong>
-											<span class="Cart-price">200.99$</span>
+											<span class="Cart-price">{% get_total_price_cart request %}$</span>
 										</div>
 										<div class="Cart-block">
 											<button class="btn btn_primary btn_lg" type="submit">Оплатить </button>

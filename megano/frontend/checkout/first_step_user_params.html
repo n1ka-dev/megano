@@ -1,5 +1,6 @@
 {% load i18n %}
-<form class="form" action="#" method="post">
+<form class="form" action="{% url 'checkout' %}" method="post">
+    {% csrf_token %}
     <div class="Order-block Order-block_OPEN" id="step1">
         <header class="Section-header Section-header_sm">
             <h2 class="Section-title">{% trans 'Step 1. User parameters' %}</h2>

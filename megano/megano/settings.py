@@ -15,6 +15,7 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 import django_heroku
 
+from django.utils.translation import ugettext_lazy as _
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
@@ -113,7 +114,10 @@ INITIAL_DELIVERY = {
     EXPRESS_DELIVERY_PROPERTY_NAME: {'name': 'Express', 'price': 500, 'rules': None},
     FREE_DELIVERY_PROPERTY_NAME: {'name': 'Free', 'price': 0, 'rules': 'min_cart_price:2000;'},
 }
-
+PAYMENT_CHOICES = [
+                        ('cart', _('Online cart')),
+                        ('random_account', _('Online from a random account')),
+                       ]
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
