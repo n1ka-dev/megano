@@ -1,16 +1,17 @@
 from django.contrib.auth.models import User
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.utils.translation import gettext_lazy as _
+from django.views.generic.detail import SingleObjectMixin
 
 from app_cart.OrderService import OrderService
 from app_cart.models import DeliveryMethod, Orders
 from app_cart.templatetags.cart_tag import get_total_price_cart, get_count_position_cart, CartService
 from app_shop.models import Product
-from django.views.generic import FormView, TemplateView
+from django.views.generic import FormView, TemplateView, CreateView, DetailView
 
-from app_cart.forms import CheckoutForm
+from app_cart.forms import CheckoutForm, PayForm
 from app_users.forms import RegisterForm, AuthForm
 
 TYPE_OPERATION_ADD = 'add'
@@ -80,13 +81,26 @@ def products_in_cart(request):
     return render(request, 'products_in_cart.html', {'cart_list': cart})
 
 
+class PayWaitView(TemplateView, FormView):
+    template_name = 'progressPayment.html'
+    form_class = PayForm
+
+
 class PayView(TemplateView, FormView):
-    template_name = 'pay.html'
+    template_name = 'payment.html'
+    form_class = PayForm
+
+    def get_success_url(self):
+        return reverse('pay-wait', kwargs={'uid': self.kwargs['uid']})
 
 
 class CheckoutView(TemplateView, FormView):
     template_name = 'checkout.html'
-    success_url = reverse_lazy('main')
+    # model = Orders
+    upid = None
+
+    def get_success_url(self):
+        return reverse('pay', kwargs={'uid': self.uid})
 
     def get(self, *args, **kwargs):
         cart = CartService(self.request)
@@ -95,7 +109,6 @@ class CheckoutView(TemplateView, FormView):
         return super().get(self.request, *args, **kwargs)
 
     def get_form_class(self):
-        print('gfk')
         if self.request.user.is_authenticated:
             return CheckoutForm
         elif self.request.GET.get('already_register', False):
@@ -128,5 +141,7 @@ class CheckoutView(TemplateView, FormView):
         form.instance.user = self.request.user
         code = form.cleaned_data.get('delivery_method')
         form.instance.delivery_method = DeliveryMethod.objects.get(code=code)
-        form.save()
+        order = form.save()
+
+        self.uid = order.uid
         return super().form_valid(form)

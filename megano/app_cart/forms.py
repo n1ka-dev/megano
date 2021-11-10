@@ -5,6 +5,14 @@ from django.utils.translation import ugettext_lazy as _
 from app_cart.models import Orders, DeliveryMethod
 
 
+class PayForm(forms.Form):
+    cart_number = forms.CharField(label=_('Cart number'),
+                                     widget=forms.TextInput(
+                                         attrs={'class': 'form-input', 'data-validate': 'require pay',
+                                                'data-mask': '9999 9999', 'placeholder': '9999 9999'}),
+                                     error_messages={'required': _('Enter cart number')})
+
+
 class CheckoutForm(forms.ModelForm):
     DELIVERY_CHOICES = [(item.code, item.display_name) for item in DeliveryMethod.objects.all()]
     PAYMENT_CHOICES = [

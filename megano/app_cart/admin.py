@@ -11,5 +11,5 @@ class DeliveryMethod(admin.ModelAdmin):
 
 @admin.register(Orders)
 class Orders(admin.ModelAdmin):
-    list_display = ['city', 'address', 'phone', 'paid']
-    search_fields = ['id', 'city', 'address', 'phone']
+    list_display = ['id','uid', 'city', 'address', 'phone', 'paid', 'create_date']
+    search_fields = ['uid', 'city', 'address', 'phone']

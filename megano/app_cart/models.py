@@ -1,22 +1,11 @@
+from uuid import uuid4
+
 from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from app_shop.models import Product
 from megano.settings import PAYMENT_CHOICES
-
-
-class Cart(models.Model):
-    goods = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
-    count = models.PositiveIntegerField(default=1)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name=_('user'), null=True)
-    price = models.DecimalField(max_digits=10, decimal_places=2, null=True)
-    order = models.ForeignKey('Orders', on_delete=models.SET_NULL, null=True)
-
-    class Meta:
-        db_table = 'cart'
-        verbose_name = _('cart')
-        verbose_name_plural = _('carts')
 
 
 class DeliveryMethod(models.Model):
@@ -33,6 +22,7 @@ class DeliveryMethod(models.Model):
 
 
 class Orders(models.Model):
+    uid = models.UUIDField(verbose_name='id', default=uuid4, unique=True)
     city = models.CharField(max_length=15, verbose_name=_('city'), null=True)
     address = models.CharField(max_length=250, verbose_name=_('address'))
     phone = models.CharField(max_length=15, verbose_name=_('phone'), null=True)
@@ -41,7 +31,8 @@ class Orders(models.Model):
     create_date = models.DateTimeField(auto_now_add=True, verbose_name=_('create date'))
     delivery_method = models.ForeignKey(DeliveryMethod, on_delete=models.CASCADE, verbose_name=_('delivery method'),
                                         default=None)
-    payment_method = models.CharField(max_length=50, choices=PAYMENT_CHOICES, default='p', verbose_name=_('payment method'))
+    payment_method = models.CharField(max_length=50, choices=PAYMENT_CHOICES, default='p',
+                                      verbose_name=_('payment method'))
     paid = models.BooleanField(default=False, verbose_name=_('paid'))
 
     class Meta:
@@ -49,3 +40,7 @@ class Orders(models.Model):
         verbose_name = _('order')
         verbose_name_plural = _('orders')
         ordering = ('-create_date',)
+
+    def change_link_id(self):
+        self.uid = uuid4()
+        self.save()
