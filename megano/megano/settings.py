@@ -16,6 +16,7 @@ from pathlib import Path
 import django_heroku
 
 from django.utils.translation import ugettext_lazy as _
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
@@ -115,9 +116,9 @@ INITIAL_DELIVERY = {
     FREE_DELIVERY_PROPERTY_NAME: {'name': 'Free', 'price': 0, 'rules': 'min_cart_price:2000;'},
 }
 PAYMENT_CHOICES = [
-                        ('cart', _('Online cart')),
-                        ('random_account', _('Online from a random account')),
-                       ]
+    ('cart', _('Online cart')),
+    ('random_account', _('Online from a random account')),
+]
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -151,3 +152,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 django_heroku.settings(locals())
 CART_SESSION_ID = 'cart'
 ORDER_SESSION_ID = 'order'
+CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
+CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/0"

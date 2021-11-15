@@ -1,9 +1,7 @@
-from django.contrib.auth.models import User
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy, reverse
 from django.utils.translation import gettext_lazy as _
-from django.views.generic.detail import SingleObjectMixin
 
 from app_cart.OrderService import OrderService
 from app_cart.models import DeliveryMethod, Orders
@@ -13,6 +11,7 @@ from django.views.generic import FormView, TemplateView, CreateView, DetailView
 
 from app_cart.forms import CheckoutForm, PayForm
 from app_users.forms import RegisterForm, AuthForm
+from app_cart.tasks import pay_service_emulation
 
 TYPE_OPERATION_ADD = 'add'
 TYPE_OPERATION_REMOVE = 'remove'
@@ -81,9 +80,18 @@ def products_in_cart(request):
     return render(request, 'products_in_cart.html', {'cart_list': cart})
 
 
-class PayWaitView(TemplateView, FormView):
+class PayWaitView(TemplateView):
     template_name = 'progressPayment.html'
-    form_class = PayForm
+
+
+def get_status_order(request, uid):
+    status = Orders.objects.get(uid=uid).status
+    message = _('We are waiting for confirmation of payment by the payment system')
+    if status == Orders.PAID:
+        message = _('Order successfully paid')
+    if status == Orders.PAYMENT_ERROR:
+        message = _('Payment declined')
+    return HttpResponse(JsonResponse({'status': status, 'message': message}))
 
 
 class PayView(TemplateView, FormView):
@@ -91,7 +99,14 @@ class PayView(TemplateView, FormView):
     form_class = PayForm
 
     def get_success_url(self):
+        print(self.kwargs)
         return reverse('pay-wait', kwargs={'uid': self.kwargs['uid']})
+
+    def form_valid(self, form):
+        cart_number = form.cleaned_data.get('cart_number')
+        pay_service_emulation.delay(cart_number, self.kwargs['uid'])
+
+        return super().form_valid(form)
 
 
 class CheckoutView(TemplateView, FormView):

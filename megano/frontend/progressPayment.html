@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load static %}
 {% load cart_tag %}
 {% block title %}Cart{% endblock %}
 {% block breadcrumbs %}
@@ -20,32 +21,54 @@
     <div class="Middle-top">
       <div class="wrap">
         <div class="Middle-header">
-          <h1 class="Middle-title">Ожидание оплаты
-          </h1>
+          <h1 class="Middle-title">{% trans 'Waiting for payment' %}</h1>
           <ul class="breadcrumbs Middle-breadcrumbs">
             <li class="breadcrumbs-item"><a href="{% url 'main' %}">home</a>
             </li>
-            <li class="breadcrumbs-item breadcrumbs-item_current"><span>Ожидание оплаты</span>
+            <li class="breadcrumbs-item breadcrumbs-item_current"><span>{% trans 'Waiting for payment' %}</span>
             </li>
           </ul>
         </div>
       </div>
     </div>
+
     <div class="Section">
       <div class="wrap">
-        <div class="ProgressPayment">
-          <div class="ProgressPayment-title">Ждем подтверждения оплаты платежной системой
-          </div>
-          <div class="ProgressPayment-icon">
-            <div class="cssload-thecube">
-              <div class="cssload-cube cssload-c1"></div>
-              <div class="cssload-cube cssload-c2"></div>
-              <div class="cssload-cube cssload-c4"></div>
-              <div class="cssload-cube cssload-c3"></div>
-            </div>
-          </div>
-        </div>
+          {% get_status_section %}
       </div>
     </div>
   </div>
+{% endblock %}
+{% block scripts %}
+ <script>
+            var timer_id;
+            function check_status(){
+                uid = location.pathname.split('/').slice(-2, -1)[0]
+                console.log('check_status')
+                $.ajax({
+                    url: '{% url 'get_order_status' uid %}',
+                    dataType: 'json',
+                    headers: {
+                            'X-CSRFToken':getCookie('csrftoken')
+                        },
+                  success: function (response) {
+                         $('.ProgressPayment-title').text(response.message);
+                         if (response.status=="payment_error"){
+                            $('.ProgressPayment-icon').html('<img src="{% static 'img/icons/stop.png' %}">');
+                         }
+                         if (response.status=="paid"){
+                            $('.ProgressPayment-icon').html('<img src="{% static 'img/icons/86784775.gif' %}">');
+                         }
+                         if(response.status=="payment_error" || response.status=="paid"){
+                             clearInterval(timer_id)
+                         }
+
+                   }
+              });
+            }
+        $(document).ready(function (){
+            timer_id = setInterval(check_status, 2000);
+
+        });
+    </script>
 {% endblock %}

@@ -7,10 +7,14 @@ from app_cart.models import Orders, DeliveryMethod
 
 class PayForm(forms.Form):
     cart_number = forms.CharField(label=_('Cart number'),
-                                     widget=forms.TextInput(
-                                         attrs={'class': 'form-input', 'data-validate': 'require pay',
-                                                'data-mask': '9999 9999', 'placeholder': '9999 9999'}),
-                                     error_messages={'required': _('Enter cart number')})
+                                  widget=forms.TextInput(
+                                      attrs={'class': 'form-input', 'data-validate': 'require pay',
+                                             'data-mask': '9999 9999', 'placeholder': '9999 9999'}),
+                                  error_messages={'required': _('Enter cart number')})
+
+    def clean_cart_number(self):
+        cart_number = int(self.cleaned_data['cart_number'].replace(' ', ''))
+        return cart_number
 
 
 class CheckoutForm(forms.ModelForm):

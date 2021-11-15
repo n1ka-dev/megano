@@ -22,6 +22,21 @@ class DeliveryMethod(models.Model):
 
 
 class Orders(models.Model):
+    DRAFT = 'draft'
+    PAID = 'paid'
+    PAYMENT_ERROR = 'payment_error'
+    WAITING_PAYMENT = 'waiting_payment'
+
+    CUSTOM_MESSAGE = 'We are waiting for confirmation of payment by the payment system'
+    PAID_MESSAGE = 'Order successfully paid'
+    PAYMENT_ERROR_MESSAGE = 'Payment declined'
+
+    STATUS_PAYMENT = [
+        (DRAFT, _('Draft')),
+        (PAID, _('Paid')),
+        (PAYMENT_ERROR, _('Payment error')),
+        (WAITING_PAYMENT, _('Waiting payment')),
+    ]
     uid = models.UUIDField(verbose_name='id', default=uuid4, unique=True)
     city = models.CharField(max_length=15, verbose_name=_('city'), null=True)
     address = models.CharField(max_length=250, verbose_name=_('address'))
@@ -33,7 +48,8 @@ class Orders(models.Model):
                                         default=None)
     payment_method = models.CharField(max_length=50, choices=PAYMENT_CHOICES, default='p',
                                       verbose_name=_('payment method'))
-    paid = models.BooleanField(default=False, verbose_name=_('paid'))
+    status = models.CharField(max_length=50, choices=STATUS_PAYMENT, default='draft',
+                              verbose_name=_('payment status'))
 
     class Meta:
         db_table = 'orders'
