@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}Sign in{% endblock %}
+{% block breadcrumbs %}
+    <nav aria-label="breadcrumb">
+         <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'main' %}">{% trans 'Home' %}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{% trans 'Sign in' %}</li>
+         </ol>
+    </nav>
+{% endblock %}
+{% block h1 %}{% trans 'Sign out' %}{% endblock %}
+{% block content %}
+	<div class="Middle Middle_top">
+		<div class="Middle-top">
+		  <div class="wrap">
+		    <div class="Middle-header">
+		      <h1 class="Middle-title">{% trans 'Profile' %}</h1>
+		      <ul class="breadcrumbs Middle-breadcrumbs">
+		        <li class="breadcrumbs-item"><a href="{% url 'main' %}">{% trans 'home' %}</a></li>
+		        <li class="breadcrumbs-item breadcrumbs-item_current"><span>{% trans 'Logged out' %}</span></li>
+		      </ul>
+		    </div>
+		  </div>
+		</div>
+		<div class="Section-content">
+		  <div class="wrap">
+		    <div class="text-center">{% trans 'You have successfully logged out of your account!' %}</div>
+		    <div class="text-center Section-title"><a href="{% url 'main' %}" class="btn btn-primary">{% trans 'To the main' %}</a></div>
+		  </div>
+		</div>
+	</div>
+{% endblock %}

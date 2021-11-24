@@ -396,6 +396,9 @@ textarea {
   margin-top: 10px;
   margin-right: 8px;
 }
+
+.text-center{text-align: center}
+.errorlist{color:red}
 /*----------  Button  ----------*/
 .btn {
   display: inline-flex;

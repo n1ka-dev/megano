@@ -1,7 +1,8 @@
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, update_session_auth_hash
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -56,6 +57,10 @@ class SiteRegistrationUserView(FormView):
         return super().form_valid(form)
 
 
+class SiteLogoutView(LogoutView):
+    template_name = 'users/logout.html'
+
+
 class ProfileUserView(LoginRequiredMixin, UpdateView):
     model = User
     form_class = ProfileEditForm
@@ -89,4 +94,5 @@ class ProfileUserView(LoginRequiredMixin, UpdateView):
         password = form.cleaned_data.get('password')
         if password:
             update_session_auth_hash(self.request, user)
+        messages.success(self.request, 'Profile updated successfully')
         return super().form_valid(form)
