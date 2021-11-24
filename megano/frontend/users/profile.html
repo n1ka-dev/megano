@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}Sign in{% endblock %}
+{% block breadcrumbs %}
+    <nav aria-label="breadcrumb">
+         <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'main' %}">{% trans 'Home' %}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{% trans 'Sign in' %}</li>
+         </ol>
+    </nav>
+{% endblock %}
+{% block h1 %}{% trans 'Sign in' %}{% endblock %}
+{% block content %}
+  <div class="Middle Middle_top">
+    <div class="Middle-top">
+      <div class="wrap">
+        <div class="Middle-header">
+          <h1 class="Middle-title">{% trans 'Profile' %}</h1>
+          <ul class="breadcrumbs Middle-breadcrumbs">
+            <li class="breadcrumbs-item"><a href="{% url 'main' %}">{% trans 'home' %}</a></li>
+            <li class="breadcrumbs-item breadcrumbs-item_current"><span>{% trans 'Profile' %}</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="Section Section_column Section_columnLeft">
+      <div class="wrap">
+        <div class="Section-column">
+          <div class="Section-columnSection">
+            <header class="Section-header">
+              <strong class="Section-title">{% trans 'Navigations' %}</strong>
+            </header>
+            <div class="Section-columnContent">
+              <div class="NavigateProfile">
+                <ul class="menu menu_vt">
+                  <li class="menu-item"><a class="menu-link" href="users/account.html">{% trans 'Personal Area' %}</a></li>
+                  <li class="menu-item_ACTIVE menu-item"><a class="menu-link" href="{% url 'profile' %}">{% trans 'Profile' %}</a></li>
+                  <li class="menu-item"><a class="menu-link" href="historyorder.html">{% trans 'History of orders' %}</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="Section-content">
+          <div class="Profile">
+            <form class="form Profile-form" action="{% url 'profile' %}" method="post"  enctype="multipart/form-data">
+                {% csrf_token %}
+              <div class="row">
+                <div class="row-block">
+                    <div class="form-group">
+                    <label class="form-label" for="avatar">{% trans 'Avatar' %}</label>
+	                <div class="Profile-avatar Profile-avatar{% if not user.profile.avatar %}_noimg{% endif %}">
+
+                        <div class="Profile-img">
+	                       <img src="{% if user.profile.avatar %}{{ user.profile.avatar.url  }}{% else %}assets/img/#.png{% endif %}" alt="#.png"/>
+                        </div>
+                        <label class="Profile-fileLabel" for="{{ form.avatar.id_for_label }}" >{{ form.avatar.label }}</label>
+                        {{ form.avatar }}
+                    </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="{{ form.last_name.id_for_label }}" >{{ form.last_name.label }}</label>
+                        {{ form.last_name }}
+                    </div>
+                </div>
+                <div class="row-block">
+                    <div class="form-group">
+                      <label class="form-label" for="{{ form.phone.id_for_label }}" >{{ form.phone.label }}</label>
+                      {{ form.phone }}
+                    </div>
+                   <div class="form-group">
+                      <label class="form-label" for="{{ form.email.id_for_label }}" >{{ form.email.label }}</label>
+                      {{ form.email }}
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label" for="{{ form.password.id_for_label }}" >{{ form.password.label }}</label>
+                        {{ form.password }}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="{{ form.password2.id_for_label }}" >{{ form.password2.label }}</label>
+                        {{ form.password2 }}
+                    </div>
+                  <div class="form-group">
+                    <div class="Profile-btn">
+                      <button class="btn btn_success" type="submit">Сохранить</button>
+                    </div>
+                    <div class="Profile-success">{{ form.errors }}</div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

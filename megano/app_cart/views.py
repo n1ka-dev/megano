@@ -99,13 +99,13 @@ class PayView(TemplateView, FormView):
     form_class = PayForm
 
     def get_success_url(self):
-        print(self.kwargs)
         return reverse('pay-wait', kwargs={'uid': self.kwargs['uid']})
 
     def form_valid(self, form):
         cart_number = form.cleaned_data.get('cart_number')
         pay_service_emulation.delay(cart_number, self.kwargs['uid'])
-
+        cart = CartService(self.request)
+        cart.clear()
         return super().form_valid(form)
 
 

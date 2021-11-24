@@ -74,7 +74,7 @@
           <nav class="row-block">
             <div class="row ControlPanel-rowSplit">
               {% if request.user.is_authenticated %}
-                 {% trans 'Welcome,'%} {{ request.user.username }}
+                  <a href="{% url 'profile' %}">{% trans 'Welcome,'%} {{ request.user.username }}</a>
                 {% else %}
                   <div class="row-block"><a class="ControlPanel-title" href="{% url 'login' %}">Login / Register</a>
                 {% endif %}
@@ -122,9 +122,11 @@
             </div>
           </div>
         </div>
-        <div class="row-block Header-trigger"><a class="menuTrigger" href="#navigate">
-            <div class="menuTrigger-content">Показать навигацию
-            </div><span></span><span></span><span></span></a>
+        <div class="row-block Header-trigger">
+        <a class="menuTrigger" href="#navigate">
+            <div class="menuTrigger-content">Показать навигацию</div>
+            <span></span><span></span><span></span>
+        </a>
         </div>
       </div>
     </div>
