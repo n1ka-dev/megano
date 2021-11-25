@@ -7,8 +7,9 @@ from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import FormView, DetailView, UpdateView
+from django.views.generic import FormView, DetailView, UpdateView, TemplateView
 
+from app_cart.models import Orders
 from app_users.forms import AuthForm, RegisterForm, ProfileEditForm
 from app_users.models import Profile
 
@@ -59,6 +60,16 @@ class SiteRegistrationUserView(FormView):
 
 class SiteLogoutView(LogoutView):
     template_name = 'users/logout.html'
+
+
+class AccountUserView(LoginRequiredMixin, TemplateView):
+    template_name = 'users/account.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(AccountUserView, self).get_context_data(**kwargs)
+        context['last_order'] = Orders.objects.filter(user=self.request.user).order_by('-create_date')[:1]
+        print(context)
+        return context
 
 
 class ProfileUserView(LoginRequiredMixin, UpdateView):

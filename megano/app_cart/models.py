@@ -20,6 +20,8 @@ class DeliveryMethod(models.Model):
         verbose_name_plural = _('delivery methods')
         ordering = ('id',)
 
+    def __str__(self):
+        return self.display_name
 
 class Orders(models.Model):
     DRAFT = 'draft'
@@ -60,3 +62,6 @@ class Orders(models.Model):
     def change_link_id(self):
         self.uid = uuid4()
         self.save()
+
+    def get_payment_method(self):
+        return dict(PAYMENT_CHOICES)[self.payment_method]

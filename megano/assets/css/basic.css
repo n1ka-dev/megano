@@ -399,6 +399,9 @@ textarea {
 
 .text-center{text-align: center}
 .errorlist{color:red}
+img.avatar-profile {
+    background: #000;
+}
 /*----------  Button  ----------*/
 .btn {
   display: inline-flex;
