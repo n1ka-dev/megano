@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'jet_django',
     'debug_toolbar',
     'app_shop',
     'app_cart',
@@ -154,3 +155,5 @@ CART_SESSION_ID = 'cart'
 ORDER_SESSION_ID = 'order'
 CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
 CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/0"
+JET_PROJECT = 'proj_5'
+JET_TOKEN = 'a980021e-9727-4988-83d2-6bee7d9f3bed'

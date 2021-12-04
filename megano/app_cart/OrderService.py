@@ -34,7 +34,7 @@ class OrderService:
 
     def get_html(self):
         out_list = []
-
+        print(self.order.items())
         for i, row in self.order.items():
             out_list.append('<div class="row-block">')
             for name, val in row.items():

@@ -23,6 +23,15 @@ class DeliveryMethod(models.Model):
     def __str__(self):
         return self.display_name
 
+
+class OrderRecord(models.Model):
+    product_name = models.CharField(max_length=70, verbose_name=_('product name'))
+    count = models.IntegerField(verbose_name=_('count'), default=1)
+    price = models.DecimalField(max_digits=7, decimal_places=2)
+    order = models.ForeignKey('Orders', on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+
+
 class Orders(models.Model):
     DRAFT = 'draft'
     PAID = 'paid'
@@ -65,3 +74,6 @@ class Orders(models.Model):
 
     def get_payment_method(self):
         return dict(PAYMENT_CHOICES)[self.payment_method]
+
+    def get_total(self):
+        return sum([item.count * item.price for item in self.orderrecord_set.all()])

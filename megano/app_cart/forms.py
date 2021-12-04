@@ -24,7 +24,7 @@ class CheckoutForm(forms.ModelForm):
         ('random_account', _('Online from a random account')),
     ]
 
-    fio = forms.CharField(max_length=50, label=_('FIO'),
+    receiver_name = forms.CharField(max_length=50, label=_('FIO'),
                           widget=forms.TextInput(attrs={'class': 'form-input', 'data-validate': 'require'}),
                           error_messages={'required': _('Enter your Name')})
     phone = forms.CharField(max_length=50, label=_('Phone'),
@@ -44,4 +44,4 @@ class CheckoutForm(forms.ModelForm):
 
     class Meta:
         model = Orders
-        fields = ['fio', 'payment_method', 'address', 'city', 'email', 'phone', 'fio']
+        fields = ['receiver_name', 'payment_method', 'address', 'city', 'email', 'phone']

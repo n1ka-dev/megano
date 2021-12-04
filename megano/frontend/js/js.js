@@ -120,7 +120,7 @@ $(document).ready(function(){
      });
 
     $('[href="#step4"]').click(function(e){
-        fio = $('[name="fio"]').val()
+        fio = $('[name="receiver_name"]').val()
         phone = $('[name="phone"]').val()
         email = $('[name="email"]').val()
         delivery_method = $('[name="delivery_method"]:checked').val()

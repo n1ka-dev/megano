@@ -67,7 +67,7 @@
 	                <div class="Order Order_anons">
 	                  <div class="Order-personal">
 	                    <div class="row">
-	                      <div class="row-block"><a class="Order-title" href="../oneorder.html">Заказ&#32;<span class="Order-numberOrder">№ {{ order.id }}</span>&#32;от&#32;
+	                      <div class="row-block"><a class="Order-title" href="{% url 'order_detail' order.pk %}">Заказ&#32;<span class="Order-numberOrder">№ {{ order.id }}</span>&#32;от&#32;
 		                      <span class="Order-dateOrder">{{ order.create_date }}</span></a>
 	                        <div class="Account-editLink"><a href="{% url 'history' %}">{% trans 'History orders' %}</a>
 	                        </div>
@@ -83,7 +83,7 @@
 	                        </div>
 	                        <div class="Order-info">
 	                          <div class="Order-infoType">{% trans 'Total amount' %}:</div>
-	                          <div class="Order-infoContent">{{ order.price }}$</div>
+	                          <div class="Order-infoContent">{{ order.get_total }}$</div>
 	                        </div>
 	                        <div class="Order-info Order-info_status">
 	                          <div class="Order-infoType">{% trans 'Status' %}:</div>

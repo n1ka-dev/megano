@@ -4,7 +4,7 @@ from django.urls import reverse_lazy, reverse
 from django.utils.translation import gettext_lazy as _
 
 from app_cart.OrderService import OrderService
-from app_cart.models import DeliveryMethod, Orders
+from app_cart.models import DeliveryMethod, Orders, OrderRecord
 from app_cart.templatetags.cart_tag import get_total_price_cart, get_count_position_cart, CartService
 from app_shop.models import Product
 from django.views.generic import FormView, TemplateView, CreateView, DetailView
@@ -12,6 +12,7 @@ from django.views.generic import FormView, TemplateView, CreateView, DetailView
 from app_cart.forms import CheckoutForm, PayForm
 from app_users.forms import RegisterForm, AuthForm
 from app_cart.tasks import pay_service_emulation
+from megano.settings import PAYMENT_CHOICES
 
 TYPE_OPERATION_ADD = 'add'
 TYPE_OPERATION_REMOVE = 'remove'
@@ -94,6 +95,17 @@ def get_status_order(request, uid):
     return HttpResponse(JsonResponse({'status': status, 'message': message}))
 
 
+class OrderDetailView(DetailView):
+    model = Orders
+    template_name = 'oneorder.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(OrderDetailView, self).get_context_data(**kwargs)
+        context['object'].payment_method = dict(PAYMENT_CHOICES)[context['object'].payment_method]
+        print(context['object'].payment_method)
+        return context
+
+
 class PayView(TemplateView, FormView):
     template_name = 'payment.html'
     form_class = PayForm
@@ -140,8 +152,8 @@ class CheckoutView(TemplateView, FormView):
 
     def get_form(self, form_class=None):
         form = super(CheckoutView, self).get_form(form_class)
-        if 'fio' in form.fields and self.request.user.is_authenticated:
-            form.fields['fio'].initial = ' '.join([self.request.user.last_name,
+        if 'receiver_name' in form.fields and self.request.user.is_authenticated:
+            form.fields['receiver_name'].initial = ' '.join([self.request.user.last_name,
                                                    self.request.user.first_name])
 
         if 'phone' in form.fields and self.request.user.is_authenticated:
@@ -157,6 +169,14 @@ class CheckoutView(TemplateView, FormView):
         code = form.cleaned_data.get('delivery_method')
         form.instance.delivery_method = DeliveryMethod.objects.get(code=code)
         order = form.save()
-
         self.uid = order.uid
+        cart = CartService(self.request)
+        for item in cart:
+            OrderRecord.objects.create(
+                product_name=item['product'].name,
+                count=item['quantity'],
+                price=item['product'].price,
+                product=item['product'],
+                order=order
+            )
         return super().form_valid(form)
