@@ -61,7 +61,7 @@ class Orders(models.Model):
         (PAYMENT_ERROR, _('Payment error')),
         (WAITING_PAYMENT, _('Waiting payment')),
     ]
-    id = models.BigIntegerField(primary_key=True)
+    id = models.BigIntegerField(primary_key=True, unique=True)
     uid = models.UUIDField(verbose_name='id', default=uuid4, unique=True)
     city = models.CharField(max_length=15, verbose_name=_('city'), null=True)
     address = models.CharField(max_length=250, verbose_name=_('address'))
