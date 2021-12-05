@@ -18,9 +18,6 @@ class PayForm(forms.Form):
 
 
 class CheckoutForm(forms.ModelForm):
-    DELIVERY_CHOICES = [(item.code, item.display_name) for item in DeliveryMethod.objects.all()]
-    PAYMENT_CHOICES = [(item.code, item.display_name) for item in PaymentMethod.objects.all()]
-
     receiver_name = forms.CharField(max_length=50, label=_('FIO'),
                           widget=forms.TextInput(attrs={'class': 'form-input', 'data-validate': 'require'}),
                           error_messages={'required': _('Enter your Name')})
@@ -36,9 +33,14 @@ class CheckoutForm(forms.ModelForm):
     address = forms.CharField(max_length=50, label='Address',
                               widget=forms.Textarea(attrs={'class': 'form-textarea', 'data-validate': 'require'}),
                               error_messages={'required': _('Enter your address')})
-    delivery_method = forms.ChoiceField(choices=DELIVERY_CHOICES, widget=forms.RadioSelect, initial='free_price', )
-    payment_method = forms.ChoiceField(choices=PAYMENT_CHOICES, widget=forms.RadioSelect, initial='online', )
+    delivery_method = forms.ChoiceField(choices=(), widget=forms.RadioSelect, initial='free_price', )
+    payment_method = forms.ChoiceField(choices=(), widget=forms.RadioSelect, initial='online', )
 
     class Meta:
         model = Orders
         fields = ['receiver_name', 'address', 'city', 'email', 'phone']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['delivery_method'].choices = [(item.code, item.display_name) for item in DeliveryMethod.objects.all()]
+        self.fields['payment_method'].choices = [(item.code, item.display_name) for item in PaymentMethod.objects.all()]

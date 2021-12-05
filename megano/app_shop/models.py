@@ -5,7 +5,6 @@ from django.utils.safestring import mark_safe
 from pytils.translit import slugify
 from django.utils.translation import gettext_lazy as _
 
-
 class Category(models.Model):
     name = models.CharField(max_length=250, verbose_name=_('name'))
     slug = models.SlugField(max_length=250, verbose_name=_('slug'), blank=True, unique=True)

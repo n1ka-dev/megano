@@ -15,7 +15,7 @@ def set_initial_props(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('app_shop', '0001_initial'),
+        ('app_cart', '0014_auto_20211205_1943'),
     ]
 
     operations = [

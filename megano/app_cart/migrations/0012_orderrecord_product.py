@@ -7,7 +7,6 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('app_shop', '0016_merge_0015_delete_settingssite_init_delivery_1'),
         ('app_cart', '0011_alter_orderrecord_count'),
     ]
 
