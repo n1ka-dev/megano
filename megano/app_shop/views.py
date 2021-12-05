@@ -14,7 +14,31 @@ class CatalogView(ListView):
     model = Product
     template_name = 'catalog.html'
     context_object_name = 'catalog'
+
     paginate_by = 8
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        title = self.request.GET.get('title')
+        if title:
+            qs = qs.filter(name__icontains=title[1:])
+            print(qs.query)
+        price = self.request.GET.get('price')
+        if price:
+            price_start, price_end = price.split(';')
+            qs = qs.filter(price__gte=price_start, price__lte=price_end)
+        return qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        qs_ordered = Product.objects.all().order_by('price')
+        context['min_price'], context['max_price'] = qs_ordered.first().price, qs_ordered.last().price
+        price = self.request.GET.get('price')
+        if price:
+            context['min_price_set'], context['max_price_set'] = price.split(';')
+        else:
+            context['min_price_set'], context['max_price_set'] = context['min_price'], context['max_price']
+        return context
 
 
 class ProductDetailView(DetailView, FormView):

@@ -166,8 +166,6 @@ class CheckoutView(TemplateView, FormView):
 
         code_p = form.cleaned_data.get('payment_method')
         form.instance.payment_method = PaymentMethod.objects.get(code=code_p)
-
-        print(form)
         order = form.save()
         self.uid = order.uid
         cart = CartService(self.request)
