@@ -80,13 +80,22 @@ WSGI_APPLICATION = 'megano.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'HOST': 'ec2-34-233-214-228.compute-1.amazonaws.com',
+        'NAME': 'd4gfg3glnus1ft',
+        'USER': 'yersiiozfzoqff',
+        'PASSWORD': '2d800537fd5c19c9401fa5ac6fce7b74b75f5777bbbe7aab89cc720bcb68e9ec',
+        'PORT': '5432',
     }
 }
-
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
