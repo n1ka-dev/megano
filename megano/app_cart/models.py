@@ -1,3 +1,4 @@
+import uuid
 from uuid import uuid4
 
 from django.conf import settings
@@ -61,8 +62,7 @@ class Orders(models.Model):
         (PAYMENT_ERROR, _('Payment error')),
         (WAITING_PAYMENT, _('Waiting payment')),
     ]
-    id = models.BigIntegerField(primary_key=True, unique=True)
-    uid = models.UUIDField(verbose_name='id', default=uuid4, unique=True)
+    uid = models.UUIDField(verbose_name='uid', default=uuid, unique=True)
     city = models.CharField(max_length=15, verbose_name=_('city'), null=True)
     address = models.CharField(max_length=250, verbose_name=_('address'))
     phone = models.CharField(max_length=15, verbose_name=_('phone'), null=True)
@@ -81,10 +81,6 @@ class Orders(models.Model):
         verbose_name = _('order')
         verbose_name_plural = _('orders')
         ordering = ('-create_date',)
-
-    def change_link_id(self):
-        self.uid = uuid4()
-        self.save()
 
     def get_total(self):
         return sum([item.count * item.price for item in self.orderrecord_set.all()])

@@ -22,5 +22,5 @@ class PaymentMethod(admin.ModelAdmin):
 @admin.register(Orders)
 class Orders(admin.ModelAdmin):
     inlines = (OrderRecordTabular,)
-    list_display = ['id', 'uid', 'city', 'address', 'phone', 'create_date', 'status']
-    search_fields = ['uid', 'city', 'address', 'phone']
+    # list_display = ['id', 'uid', 'city', 'address', 'phone', 'create_date', 'status']
+    # search_fields = ['uid', 'city', 'address', 'phone']
