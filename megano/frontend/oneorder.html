@@ -23,7 +23,7 @@
           <h1 class="Middle-title">Заказ №{{ object.id }}</h1>
           <ul class="breadcrumbs Middle-breadcrumbs">
             <li class="breadcrumbs-item"><a href="{% url 'main' %}">home</a></li>
-            <li class="breadcrumbs-item"><a href="historyorder.html">История заказов</a></li>
+            <li class="breadcrumbs-item"><a href="{% url 'history' %}">История заказов</a></li>
             <li class="breadcrumbs-item breadcrumbs-item_current"><span>Заказ №{{ object.id }}</span>
             </li>
           </ul>
@@ -59,7 +59,7 @@
                   <div class="row-block">
                     <div class="Order-info Order-info_delivery">
                       <div class="Order-infoType">Тип доставки:</div>
-                      <div class="Order-infoContent">{{ object.delivery_method.name }}</div>
+                      <div class="Order-infoContent">{{ object.delivery_method }}</div>
                     </div>
                     <div class="Order-info">
                       <div class="Order-infoType">Город: </div>

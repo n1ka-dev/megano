@@ -1,0 +1,23 @@
+{% load i18n %}
+{% url 'profile' as url_profile %}
+{% url 'history' as url_history %}
+{% url 'account' as url_account %}
+
+ <div class="Section-columnSection">
+            <header class="Section-header">
+              <strong class="Section-title">{% trans 'Navigations' %}</strong>
+            </header>
+            <div class="Section-columnContent">
+              <div class="NavigateProfile">
+                <ul class="menu menu_vt">
+					<ul class="menu menu_vt">
+						<li class="{% if request.path == url_account %}menu-item_ACTIVE{% endif %} menu-item"><a class="menu-link" href="{% url 'account' %}">{% trans 'Personal Area' %}</a></li>
+						<li class="{% if request.path == url_profile %}menu-item_ACTIVE{% endif %} menu-item"><a class="menu-link" href="{% url 'profile' %}">{% trans 'Profile' %}</a></li>
+						<li class="{% if request.path == url_history %}menu-item_ACTIVE{% endif %} menu-item"><a class="menu-link" href="{% url 'history' %}">{% trans 'History of orders' %}</a></li>
+						<li class="menu-item"><a class="menu-link" href="{% url 'logout' %}">{% trans 'Exit' %}</a></li>
+					</ul>
+                </ul>
+              </div>
+            </div>
+          </div>
+

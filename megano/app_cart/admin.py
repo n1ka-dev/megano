@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from app_cart.models import DeliveryMethod, Orders, OrderRecord
+from app_cart.models import DeliveryMethod, Orders, OrderRecord, PaymentMethod
 
 
 class OrderRecordTabular(admin.TabularInline):
@@ -11,6 +11,12 @@ class OrderRecordTabular(admin.TabularInline):
 class DeliveryMethod(admin.ModelAdmin):
     list_display = ['code', 'price', 'rules']
     search_fields = ['code', 'price']
+
+
+@admin.register(PaymentMethod)
+class PaymentMethod(admin.ModelAdmin):
+    list_display = ['code']
+    search_fields = ['code', 'display_name']
 
 
 @admin.register(Orders)

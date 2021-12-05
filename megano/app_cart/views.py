@@ -4,7 +4,7 @@ from django.urls import reverse_lazy, reverse
 from django.utils.translation import gettext_lazy as _
 
 from app_cart.OrderService import OrderService
-from app_cart.models import DeliveryMethod, Orders, OrderRecord
+from app_cart.models import DeliveryMethod, Orders, OrderRecord, PaymentMethod
 from app_cart.templatetags.cart_tag import get_total_price_cart, get_count_position_cart, CartService
 from app_shop.models import Product
 from django.views.generic import FormView, TemplateView, CreateView, DetailView
@@ -12,7 +12,6 @@ from django.views.generic import FormView, TemplateView, CreateView, DetailView
 from app_cart.forms import CheckoutForm, PayForm
 from app_users.forms import RegisterForm, AuthForm
 from app_cart.tasks import pay_service_emulation
-from megano.settings import PAYMENT_CHOICES
 
 TYPE_OPERATION_ADD = 'add'
 TYPE_OPERATION_REMOVE = 'remove'
@@ -99,12 +98,6 @@ class OrderDetailView(DetailView):
     model = Orders
     template_name = 'oneorder.html'
 
-    def get_context_data(self, **kwargs):
-        context = super(OrderDetailView, self).get_context_data(**kwargs)
-        context['object'].payment_method = dict(PAYMENT_CHOICES)[context['object'].payment_method]
-        print(context['object'].payment_method)
-        return context
-
 
 class PayView(TemplateView, FormView):
     template_name = 'payment.html'
@@ -154,7 +147,7 @@ class CheckoutView(TemplateView, FormView):
         form = super(CheckoutView, self).get_form(form_class)
         if 'receiver_name' in form.fields and self.request.user.is_authenticated:
             form.fields['receiver_name'].initial = ' '.join([self.request.user.last_name,
-                                                   self.request.user.first_name])
+                                                             self.request.user.first_name])
 
         if 'phone' in form.fields and self.request.user.is_authenticated:
             form.fields['phone'].initial = self.request.user.profile.phone
@@ -165,9 +158,16 @@ class CheckoutView(TemplateView, FormView):
         return form
 
     def form_valid(self, form):
+
         form.instance.user = self.request.user
-        code = form.cleaned_data.get('delivery_method')
-        form.instance.delivery_method = DeliveryMethod.objects.get(code=code)
+
+        code_d = form.cleaned_data.get('delivery_method')
+        form.instance.delivery_method = DeliveryMethod.objects.get(code=code_d)
+
+        code_p = form.cleaned_data.get('payment_method')
+        form.instance.payment_method = PaymentMethod.objects.get(code=code_p)
+
+        print(form)
         order = form.save()
         self.uid = order.uid
         cart = CartService(self.request)

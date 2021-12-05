@@ -7,7 +7,7 @@ from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import FormView, DetailView, UpdateView, TemplateView
+from django.views.generic import FormView, DetailView, UpdateView, TemplateView, ListView
 
 from app_cart.models import Orders
 from app_users.forms import AuthForm, RegisterForm, ProfileEditForm
@@ -70,6 +70,11 @@ class AccountUserView(LoginRequiredMixin, TemplateView):
         context['last_order'] = Orders.objects.filter(user=self.request.user).order_by('-create_date')[:1]
         print(context)
         return context
+
+
+class HistoryOrdersView(LoginRequiredMixin, ListView):
+    model = Orders
+    template_name = 'users/historyorder.html'
 
 
 class ProfileUserView(LoginRequiredMixin, UpdateView):

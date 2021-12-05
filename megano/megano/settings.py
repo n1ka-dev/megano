@@ -116,8 +116,8 @@ INITIAL_DELIVERY = {
     EXPRESS_DELIVERY_PROPERTY_NAME: {'name': 'Express', 'price': 500, 'rules': None},
     FREE_DELIVERY_PROPERTY_NAME: {'name': 'Free', 'price': 0, 'rules': 'min_cart_price:2000;'},
 }
-PAYMENT_CHOICES = [
-    ('cart', _('Online cart')),
+INITIAL_PAYMENTS = [
+    ('online', _('Online cart')),
     ('random_account', _('Online from a random account')),
 ]
 # Internationalization

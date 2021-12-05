@@ -5,12 +5,11 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from app_shop.models import Product
-from megano.settings import PAYMENT_CHOICES
 
 
 class DeliveryMethod(models.Model):
     code = models.CharField(max_length=15, verbose_name=_('code'), null=True)
-    display_name = models.CharField(max_length=15, verbose_name=_('name'), null=True)
+    display_name = models.CharField(max_length=50, verbose_name=_('name'), null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     rules = models.CharField(max_length=150, verbose_name=_('rules'), null=True)
 
@@ -18,6 +17,20 @@ class DeliveryMethod(models.Model):
         db_table = 'delivery_methods'
         verbose_name = _('delivery method')
         verbose_name_plural = _('delivery methods')
+        ordering = ('id',)
+
+    def __str__(self):
+        return self.display_name
+
+
+class PaymentMethod(models.Model):
+    code = models.CharField(max_length=15, verbose_name=_('code'), null=True)
+    display_name = models.CharField(max_length=50, verbose_name=_('name'), null=True)
+
+    class Meta:
+        db_table = 'payment_methods'
+        verbose_name = _('payment method')
+        verbose_name_plural = _('payment methods')
         ordering = ('id',)
 
     def __str__(self):
@@ -57,8 +70,8 @@ class Orders(models.Model):
     create_date = models.DateTimeField(auto_now_add=True, verbose_name=_('create date'))
     delivery_method = models.ForeignKey(DeliveryMethod, on_delete=models.CASCADE, verbose_name=_('delivery method'),
                                         default=None)
-    payment_method = models.CharField(max_length=50, choices=PAYMENT_CHOICES, default='p',
-                                      verbose_name=_('payment method'))
+    payment_method = models.ForeignKey(PaymentMethod, on_delete=models.CASCADE, verbose_name=_('payment method'), default=None)
+
     status = models.CharField(max_length=50, choices=STATUS_PAYMENT, default='draft',
                               verbose_name=_('payment status'))
 
@@ -71,9 +84,6 @@ class Orders(models.Model):
     def change_link_id(self):
         self.uid = uuid4()
         self.save()
-
-    def get_payment_method(self):
-        return dict(PAYMENT_CHOICES)[self.payment_method]
 
     def get_total(self):
         return sum([item.count * item.price for item in self.orderrecord_set.all()])

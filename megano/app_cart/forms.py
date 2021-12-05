@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.utils.translation import ugettext_lazy as _
 
-from app_cart.models import Orders, DeliveryMethod
+from app_cart.models import Orders, DeliveryMethod, PaymentMethod
 
 
 class PayForm(forms.Form):
@@ -19,10 +19,7 @@ class PayForm(forms.Form):
 
 class CheckoutForm(forms.ModelForm):
     DELIVERY_CHOICES = [(item.code, item.display_name) for item in DeliveryMethod.objects.all()]
-    PAYMENT_CHOICES = [
-        ('cart', _('Online cart')),
-        ('random_account', _('Online from a random account')),
-    ]
+    PAYMENT_CHOICES = [(item.code, item.display_name) for item in PaymentMethod.objects.all()]
 
     receiver_name = forms.CharField(max_length=50, label=_('FIO'),
                           widget=forms.TextInput(attrs={'class': 'form-input', 'data-validate': 'require'}),
@@ -40,8 +37,8 @@ class CheckoutForm(forms.ModelForm):
                               widget=forms.Textarea(attrs={'class': 'form-textarea', 'data-validate': 'require'}),
                               error_messages={'required': _('Enter your address')})
     delivery_method = forms.ChoiceField(choices=DELIVERY_CHOICES, widget=forms.RadioSelect, initial='free_price', )
-    payment_method = forms.ChoiceField(choices=PAYMENT_CHOICES, widget=forms.RadioSelect, initial='cart', )
+    payment_method = forms.ChoiceField(choices=PAYMENT_CHOICES, widget=forms.RadioSelect, initial='online', )
 
     class Meta:
         model = Orders
-        fields = ['receiver_name', 'payment_method', 'address', 'city', 'email', 'phone']
+        fields = ['receiver_name', 'address', 'city', 'email', 'phone']

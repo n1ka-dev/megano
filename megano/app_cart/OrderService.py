@@ -1,7 +1,6 @@
-from app_cart.models import DeliveryMethod
+from app_cart.models import DeliveryMethod, PaymentMethod
 from app_shop.models import Product
 from megano import settings
-from megano.settings import PAYMENT_CHOICES
 
 dict_order_names = {
     'fio': 'ФИО',
@@ -22,7 +21,7 @@ class OrderService:
             # save an empty cart in the session
             order = self.session[settings.ORDER_SESSION_ID] = {}
         self.order = order
-        self.display_names = {ch: str(val) for ch, val in PAYMENT_CHOICES}
+        self.display_names = {}
 
     def save(self, data):
         """ Обновление сессии """
@@ -30,6 +29,10 @@ class OrderService:
         code = self.order['s-row']['delivery_method']
         d_name = DeliveryMethod.objects.get(code=code).display_name
         self.display_names[code] = d_name
+
+        code_payment = self.order['s-row']['payment_method']
+        p_name = PaymentMethod.objects.get(code=code_payment).display_name
+        self.display_names[code_payment] = p_name
         self.session.modified = True
 
     def get_html(self):
