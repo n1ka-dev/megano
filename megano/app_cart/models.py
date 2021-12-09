@@ -9,7 +9,7 @@ from app_shop.models import Product
 
 
 class DeliveryMethod(models.Model):
-    code = models.CharField(max_length=15, verbose_name=_('code'), null=True)
+    code = models.CharField(max_length=25, verbose_name=_('code'), null=True)
     display_name = models.CharField(max_length=50, verbose_name=_('name'), null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     rules = models.CharField(max_length=150, verbose_name=_('rules'), null=True)
@@ -25,7 +25,7 @@ class DeliveryMethod(models.Model):
 
 
 class PaymentMethod(models.Model):
-    code = models.CharField(max_length=15, verbose_name=_('code'), null=True)
+    code = models.CharField(max_length=25, verbose_name=_('code'), null=True)
     display_name = models.CharField(max_length=50, verbose_name=_('name'), null=True)
 
     class Meta:
@@ -45,7 +45,6 @@ class OrderRecord(models.Model):
     order = models.ForeignKey('Orders', on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
-
 class Orders(models.Model):
     DRAFT = 'draft'
     PAID = 'paid'
@@ -62,7 +61,8 @@ class Orders(models.Model):
         (PAYMENT_ERROR, _('Payment error')),
         (WAITING_PAYMENT, _('Waiting payment')),
     ]
-    uid = models.UUIDField(verbose_name='uid', default=uuid, unique=True)
+
+    uid = models.UUIDField(verbose_name='uid', default=uuid4, unique=True)
     city = models.CharField(max_length=15, verbose_name=_('city'), null=True)
     address = models.CharField(max_length=250, verbose_name=_('address'))
     phone = models.CharField(max_length=15, verbose_name=_('phone'), null=True)
@@ -71,7 +71,8 @@ class Orders(models.Model):
     create_date = models.DateTimeField(auto_now_add=True, verbose_name=_('create date'))
     delivery_method = models.ForeignKey(DeliveryMethod, on_delete=models.CASCADE, verbose_name=_('delivery method'),
                                         default=None)
-    payment_method = models.ForeignKey(PaymentMethod, on_delete=models.CASCADE, verbose_name=_('payment method'), default=None)
+    payment_method = models.ForeignKey(PaymentMethod, on_delete=models.CASCADE, verbose_name=_('payment method'),
+                                       default=None)
 
     status = models.CharField(max_length=50, choices=STATUS_PAYMENT, default='draft',
                               verbose_name=_('payment status'))
