@@ -39,9 +39,12 @@ def save_order_info(request):
     }
 
     order = OrderService(request)
+    cart = CartService(request)
     order.save(data)
     return HttpResponse(JsonResponse({'status': 'success',
                                       'html': order.get_html(),
+                                      'delivery_price': order.delivery_method.price,
+                                      'total_price': "{:.2f}".format(float(order.delivery_method.price)+cart.get_sum()),
                                       'message': _(f'order info saved')}))
 
 
@@ -128,6 +131,14 @@ class CheckoutView(TemplateView, FormView):
             return HttpResponseRedirect(reverse_lazy('cart'))
         return super().get(self.request, *args, **kwargs)
 
+    def get_form_kwargs(self):
+        kwargs = super(CheckoutView, self).get_form_kwargs()
+        if self.request.user.is_authenticated:
+            cart = CartService(self.request)
+            sum_cart = cart.get_sum()
+            kwargs['sum_cart'] = sum_cart
+        return kwargs
+
     def get_form_class(self):
         if self.request.user.is_authenticated:
             return CheckoutForm
@@ -139,7 +150,6 @@ class CheckoutView(TemplateView, FormView):
     def get_context_data(self, **kwargs):
         context = super(CheckoutView, self).get_context_data(**kwargs)
         cart = CartService(self.request)
-
         context['cart_list'] = cart
         return context
 
@@ -158,7 +168,6 @@ class CheckoutView(TemplateView, FormView):
         return form
 
     def form_valid(self, form):
-
         form.instance.user = self.request.user
 
         code_d = form.cleaned_data.get('delivery_method')

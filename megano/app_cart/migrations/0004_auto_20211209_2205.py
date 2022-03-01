@@ -16,4 +16,9 @@ class Migration(migrations.Migration):
             name='uid',
             field=models.UUIDField(default=uuid.uuid4, unique=True, verbose_name='uid'),
         ),
+        migrations.AddField(
+            model_name='deliverymethod',
+            name='max_sum',
+            field=models.PositiveIntegerField(blank=True, default=None, null=True, verbose_name='max sum'),
+        ),
     ]

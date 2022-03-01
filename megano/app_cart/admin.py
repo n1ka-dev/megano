@@ -7,10 +7,10 @@ class OrderRecordTabular(admin.TabularInline):
     model = OrderRecord
 
 
-@admin.register(DeliveryMethod)
-class DeliveryMethod(admin.ModelAdmin):
-    list_display = ['code', 'price', 'rules']
-    search_fields = ['code', 'price']
+# @admin.register(DeliveryMethod)
+# class DeliveryMethod(admin.ModelAdmin):
+#     # list_display = ['code', 'price', 'min_sum', 'max_sum', 'display_name']
+    # search_fields = ['code', 'price']
 
 
 @admin.register(PaymentMethod)

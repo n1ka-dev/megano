@@ -1,11 +1,11 @@
 from django.contrib.auth.models import User
-from django.db.models import F
+from django.db.models import F, Count
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic import ListView, DetailView, FormView
 from rest_framework.generics import ListCreateAPIView
 
-from app_shop.models import Product, Comment
+from app_shop.models import Product, Comment, Tags
 from app_shop.forms import CommentForm
 from app_shop.serializer import CommentSerializer
 
@@ -16,17 +16,33 @@ class CatalogView(ListView):
     context_object_name = 'catalog'
 
     paginate_by = 8
+    sorting_fields = {
+        'popular': 'views_count',
+        'price': 'price',
+        'create_date': 'create_date',
+        'reviews': 'reviews',
+    }
 
     def get_queryset(self):
-        qs = super().get_queryset()
+        qs = super().get_queryset().prefetch_related('images', 'tags')
         title = self.request.GET.get('title')
         if title:
             qs = qs.filter(name__icontains=title[1:])
-            print(qs.query)
         price = self.request.GET.get('price')
         if price:
             price_start, price_end = price.split(';')
             qs = qs.filter(price__gte=price_start, price__lte=price_end)
+        in_stock = self.request.GET.get('stock_balance')
+        if in_stock:
+            qs = qs.filter(stock_balance__gte=0)
+        sort_field = self.request.GET.get('sort_field', 'popular')
+        sort_by = self.request.GET.get('sort_by', 'inc')
+        pref = '-' if sort_by == 'dec' else ''
+
+        if sort_field != 'reviews':
+            qs = qs.order_by(f'{pref}{self.sorting_fields[sort_field]}')
+        else:
+            qs = qs.annotate(cnt=Count('comment')).order_by(f'{pref}cnt')
         return qs
 
     def get_context_data(self, **kwargs):
@@ -34,10 +50,14 @@ class CatalogView(ListView):
         qs_ordered = Product.objects.all().order_by('price')
         context['min_price'], context['max_price'] = qs_ordered.first().price, qs_ordered.last().price
         price = self.request.GET.get('price')
+        context['free_delivery'] = 'checked' if self.request.GET.get('free_delivery') else ''
+        context['in_stock'] = 'checked' if self.request.GET.get('in_stock') else ''
+
         if price:
             context['min_price_set'], context['max_price_set'] = price.split(';')
         else:
             context['min_price_set'], context['max_price_set'] = context['min_price'], context['max_price']
+
         return context
 
 

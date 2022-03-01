@@ -9,7 +9,7 @@ class Category(models.Model):
     name = models.CharField(max_length=250, verbose_name=_('name'))
     slug = models.SlugField(max_length=250, verbose_name=_('slug'), blank=True, unique=True)
     parent_category = models.ForeignKey('Category', on_delete=models.SET_NULL, null=True, blank=True,
-                                        verbose_name=_('parent category'))
+                                        verbose_name=_('parent category'), related_name='parent')
     icon = models.FileField(upload_to='uploads/category/icons/', null=True, blank=True)
     description = models.TextField(verbose_name=_('description'), null=True, blank=True)
 

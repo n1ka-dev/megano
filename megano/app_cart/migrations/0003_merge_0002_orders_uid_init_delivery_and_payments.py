@@ -11,4 +11,13 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.RemoveField(
+         model_name='deliverymethod',
+         name='rules',
+        ),
+        migrations.AddField(
+            model_name='deliverymethod',
+            name='min_sum',
+            field=models.PositiveIntegerField(blank=True, default=None, null=True, verbose_name='min sum'),
+        ),
     ]

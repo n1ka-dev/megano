@@ -12,7 +12,8 @@ class DeliveryMethod(models.Model):
     code = models.CharField(max_length=25, verbose_name=_('code'), null=True)
     display_name = models.CharField(max_length=50, verbose_name=_('name'), null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, null=True)
-    rules = models.CharField(max_length=150, verbose_name=_('rules'), null=True)
+    min_sum = models.PositiveIntegerField(verbose_name=_('min sum'), default=None, null=True, blank=True)
+    max_sum = models.PositiveIntegerField(verbose_name=_('max sum'), default=None, null=True, blank=True)
 
     class Meta:
         db_table = 'delivery_methods'
@@ -44,6 +45,7 @@ class OrderRecord(models.Model):
     price = models.DecimalField(max_digits=7, decimal_places=2)
     order = models.ForeignKey('Orders', on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+
 
 class Orders(models.Model):
     DRAFT = 'draft'

@@ -15,11 +15,11 @@ dict_order_names = {
 
 class OrderService:
     def __init__(self, request):
+        self.code_payment = None
         self.session = request.session
-        order = self.session.get(settings.ORDER_SESSION_ID)
-        if not order:
-            # save an empty cart in the session
-            order = self.session[settings.ORDER_SESSION_ID] = {}
+        order = self.session.get(settings.ORDER_SESSION_ID, {})
+
+        self.delivery_method = ''
         self.order = order
         self.display_names = {}
 
@@ -27,17 +27,21 @@ class OrderService:
         """ Обновление сессии """
         self.order = self.session[settings.ORDER_SESSION_ID] = data
         code = self.order['s-row']['delivery_method']
-        d_name = DeliveryMethod.objects.get(code=code).display_name
-        self.display_names[code] = d_name
+        self.delivery_method = DeliveryMethod.objects.get(code=code)
+        self.display_names[code] = self.delivery_method.display_name
 
         code_payment = self.order['s-row']['payment_method']
-        p_name = PaymentMethod.objects.get(code=code_payment).display_name
-        self.display_names[code_payment] = p_name
+        pm_name = PaymentMethod.objects.get(code=code_payment).display_name
+        self.display_names[code_payment] = pm_name
+        self.code_payment = code_payment
+
         self.session.modified = True
+
+    def get_delivery_price(self):
+        return self.delivery_method.price if self.delivery_method else 0
 
     def get_html(self):
         out_list = []
-        print(self.order.items())
         for i, row in self.order.items():
             out_list.append('<div class="row-block">')
             for name, val in row.items():
