@@ -2551,3 +2551,11 @@ button.link {
 .wrap-content {
   margin: 0 auto;
 }
+span.random_btn {
+    width: 50px;
+    height: 50px;
+    display: inline-block;
+    margin: 5px 5px 0;
+    background:url('../img/icons/random.png') center no-repeat;
+    cursor:pointer;
+}

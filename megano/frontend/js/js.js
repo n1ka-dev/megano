@@ -16,6 +16,12 @@ function getCookie(name) {
 function order_html(html){
     $('.Order-personal>.row').html(html)
 }
+function order_html_delivery_price(price){
+    $('.delivery_price').html(price)
+}
+function order_html_total_price(price){
+    $('.total_price').html(price)
+}
 function show_message(message){
     const $item = $('<div class="message">' + message+ '</div>');
     $item.appendTo($('.message-box')).delay(3000).slideUp(200, function(){
@@ -47,7 +53,9 @@ function save_order_info(data){
             '/cart/save_order_info/',
             data,
             function (res){
-                order_html(res.html)
+                order_html(res.html);
+                order_html_delivery_price(res.delivery_price)
+                order_html_total_price(res.total_price)
             });
 }
 function cart_update(id_product, data){
@@ -140,6 +148,11 @@ $(document).ready(function(){
     });
     $('.submit-register').click(function(e){
         $('#Register-form').submit();
+    })
+
+    $('.random_btn').click(function(e){
+        $('[name="cart_number"]').val(Math.floor(10000000 + Math.random() * 90000000));
+        $('[name="cart_number"]').trigger('blur.mask');
     })
 
 
