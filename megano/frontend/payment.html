@@ -37,6 +37,7 @@
             <div class="form-group">
                 <label class="form-label" for="{{ form.cart_number.id_for_label }}" >{{ form.cart_number.label }}</label>
                 {{ form.cart_number }}
+                {% get_random_button %}
             </div>
           </div>
             <button class="btn btn_primary btn_lg" type="submit">Оплатить </button>

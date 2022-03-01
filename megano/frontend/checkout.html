@@ -134,8 +134,14 @@
                                     {% endfor %}
 									<div class="Cart-total">
 										<div class="Cart-block Cart-block_total">
-											<strong class="Cart-title">Итого: </strong>
-											<span class="Cart-price">{% get_total_price_cart request %}$</span>
+											<div class="linec small">
+												<strong class="Cart-title">Доставка: </strong>
+												<span class="Cart-price delivery_price">{% get_price_delivery request %}$</span>
+											</div>
+											<div class="line">
+												<strong class="Cart-title">Итого: </strong>
+												<span class="Cart-price total_price">{% get_total_price_cart request %}$</span>
+											</div>
 										</div>
 										<div class="Cart-block">
 											<button class="btn btn_primary btn_lg" type="submit">Оплатить </button>
