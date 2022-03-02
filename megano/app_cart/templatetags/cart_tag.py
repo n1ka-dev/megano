@@ -2,9 +2,30 @@ from django import template
 from django.utils.safestring import mark_safe
 
 from app_cart.CartService import CartService
+from app_cart.OrderService import OrderService
 from app_cart.models import Orders
 
 register = template.Library()
+
+
+@register.simple_tag()
+def get_price_delivery(request, *args, **kwargs):
+    """
+    Подсчет стоимости товаров в корзине.
+    """
+    order = OrderService(request)
+    return order.get_delivery_price()
+
+
+@register.simple_tag(takes_context=True)
+def get_random_button(context, *args, **kwargs):
+    """
+    Подсчет стоимости товаров в корзине.
+    """
+    order = OrderService(context.request)
+    if order.order['s-row']['payment_method'] == 'random_account':
+        btn = '<span class="random_btn"></span>'
+    return mark_safe(btn) or ''
 
 
 @register.simple_tag()
@@ -50,21 +71,21 @@ def get_status_section(context, *args, **kwargs):
     status = Orders.objects.get(uid=context.get('uid')).status
     if status == Orders.PAYMENT_ERROR:
         html = "<div class=\"ProgressPayment\">" \
-               f"<div class=\"ProgressPayment-title\">{ Orders.PAYMENT_ERROR_MESSAGE }</div>" \
+               f"<div class=\"ProgressPayment-title\">{Orders.PAYMENT_ERROR_MESSAGE}</div>" \
                """<div class="ProgressPayment-icon">
                <img src="/assets/img/icons/stop.png">
               </div>
             </div>"""
     elif status == Orders.PAID:
         html = "<div class=\"ProgressPayment\">" \
-               f"<div class=\"ProgressPayment-title\">{ Orders.PAID_MESSAGE }</div>" \
+               f"<div class=\"ProgressPayment-title\">{Orders.PAID_MESSAGE}</div>" \
                """<div class="ProgressPayment-icon">
                <img src="/assets/img/icons/86784775.gif">
               </div>
             </div>"""
     else:
         html = "<div class=\"ProgressPayment\">" \
-               f"<div class=\"ProgressPayment-title\">{ Orders.CUSTOM_MESSAGE }</div>" \
+               f"<div class=\"ProgressPayment-title\">{Orders.CUSTOM_MESSAGE}</div>" \
                """<div class="ProgressPayment-icon">
                 <div class="cssload-thecube">
                   <div class="cssload-cube cssload-c1"></div>
