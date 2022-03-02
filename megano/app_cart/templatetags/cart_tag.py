@@ -23,6 +23,7 @@ def get_random_button(context, *args, **kwargs):
     Подсчет стоимости товаров в корзине.
     """
     order = OrderService(context.request)
+    btn = None
     if order.order['s-row']['payment_method'] == 'random_account':
         btn = '<span class="random_btn"></span>'
     return mark_safe(btn) or ''
