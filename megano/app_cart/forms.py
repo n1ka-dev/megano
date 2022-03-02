@@ -44,14 +44,14 @@ class CheckoutForm(forms.ModelForm):
 
     def __init__(self, sum_cart=0, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        #
-        # self.fields['delivery_method'].choices = [(item.code, item.display_name) for item in
-        #                                           DeliveryMethod.objects.filter(
-        #                                               Q(min_sum__lt=sum_cart) | Q(max_sum__gte=sum_cart) | Q(
-        #                                                   min_sum__isnull=True, max_sum__isnull=True))]
-        # initial_delivery_code = 'free_price'
-        # if initial_delivery_code not in dict(self.fields['delivery_method'].choices):
-        #     initial_delivery_code = 'delivery_price'
-        #
-        # self.fields['delivery_method'].initial = initial_delivery_code
-        # self.fields['payment_method'].choices = [(item.code, item.display_name) for item in PaymentMethod.objects.all()]
+
+        self.fields['delivery_method'].choices = [(item.code, item.display_name) for item in
+                                                  DeliveryMethod.objects.filter(
+                                                      Q(min_sum__lt=sum_cart) | Q(max_sum__gte=sum_cart) | Q(
+                                                          min_sum__isnull=True, max_sum__isnull=True))]
+        initial_delivery_code = 'free_price'
+        if initial_delivery_code not in dict(self.fields['delivery_method'].choices):
+            initial_delivery_code = 'delivery_price'
+
+        self.fields['delivery_method'].initial = initial_delivery_code
+        self.fields['payment_method'].choices = [(item.code, item.display_name) for item in PaymentMethod.objects.all()]

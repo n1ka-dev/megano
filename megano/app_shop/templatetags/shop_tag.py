@@ -1,5 +1,4 @@
 import urllib
-from copy import copy
 
 from django import template
 from django.db.models import Sum, F, Case, When, Count
