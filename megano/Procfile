@@ -1,1 +1,2 @@
 web: gunicorn megano.wsgi
+worker: celery -A megano  worker -l INFO --pool=solo
