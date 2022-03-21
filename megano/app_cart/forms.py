@@ -47,8 +47,8 @@ class CheckoutForm(forms.ModelForm):
 
         self.fields['delivery_method'].choices = [(item.code, item.display_name) for item in
                                                   DeliveryMethod.objects.filter(
-                                                      Q(min_sum__lt=sum_cart) | Q(max_sum__gte=sum_cart) | Q(
-                                                          min_sum__isnull=True, max_sum__isnull=True))]
+                                                      Q(Q(min_sum__lt=sum_cart) | Q(min_sum__isnull=True)),
+                                                      Q(Q(max_sum__gte=sum_cart) | Q(max_sum__isnull=True)))]
         initial_delivery_code = 'free_price'
         if initial_delivery_code not in dict(self.fields['delivery_method'].choices):
             initial_delivery_code = 'delivery_price'

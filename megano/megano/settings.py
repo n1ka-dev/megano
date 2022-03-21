@@ -83,18 +83,12 @@ WSGI_APPLICATION = 'megano.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
-DATABASES = {
-    'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'HOST': 'ec2-34-233-214-228.compute-1.amazonaws.com',
-        'NAME': 'd4gfg3glnus1ft',
-        'USER': 'yersiiozfzoqff',
-        'PASSWORD': '2d800537fd5c19c9401fa5ac6fce7b74b75f5777bbbe7aab89cc720bcb68e9ec',
-        'PORT': '5432',
+        'HOST': os.environ['M_DB_HOST'],
+        'NAME': os.environ['M_DB_NAME'],
+        'USER': os.environ['M_DB_USER'],
+        'PASSWORD': os.environ['M_DB_PASS'],
+        'PORT': os.environ.get('DB_PORT', '5432'),
     }
 }
 # Password validation
@@ -162,5 +156,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 django_heroku.settings(locals())
 CART_SESSION_ID = 'cart'
 ORDER_SESSION_ID = 'order'
-CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
-CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/0"
+CELERY_BROKER_URL = os.environ['REDIS_URL']
+CELERY_RESULT_BACKEND = os.environ['REDIS_URL']
