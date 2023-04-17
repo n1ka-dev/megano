@@ -23,12 +23,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-&dlrv^9&iu@-x)(y$f+z0&mie6!!ok1w@45dg^@39uak(pc^&('
-
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-&dlrv^9&iu@-x)(y$f+z0&mie6!!ok1w@45dg^@39uak(pc^&(')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.0.1']
 INTERNAL_IPS = [
     '127.0.0.1'
 ]
@@ -83,14 +82,24 @@ WSGI_APPLICATION = 'megano.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'HOST': os.environ['M_DB_HOST'],
-        'NAME': os.environ['M_DB_NAME'],
-        'USER': os.environ['M_DB_USER'],
-        'PASSWORD': os.environ['M_DB_PASS'],
-        'PORT': os.environ.get('DB_PORT', '5432'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'HOST': os.environ.get('DB_HOST_MEGANO', 'localhost'),
+        'NAME': os.environ.get('DB_NAME_MEGANO', 'app'),
+        'USER': os.environ.get('DB_USER_MEGANO', 'postgres'),
+        'PASSWORD': os.environ.get('DB_PASS_MEGANO', 'supersecretpassword'),
+        "PORT": os.environ.get('DB_PORT_MEGANO', '6543')
     }
 }
+# DATABASES = {
+#     "default": {
+#         "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),
+#         "NAME": os.environ.get("SQL_DATABASE", os.path.join(BASE_DIR, "db.sqlite3")),
+#         "USER": os.environ.get("SQL_USER", "user"),
+#         "PASSWORD": os.environ.get("SQL_PASSWORD", "password"),
+#         "HOST": os.environ.get("SQL_HOST", "localhost"),
+#         "PORT": os.environ.get("SQL_PORT", "5432"),
+#     }
+# }
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 

@@ -75,6 +75,13 @@ class AccountUserView(LoginRequiredMixin, TemplateView):
 class HistoryOrdersView(LoginRequiredMixin, ListView):
     model = Orders
     template_name = 'users/historyorder.html'
+    paginate_by = 6
+
+    def get_queryset(self):
+        new_context = Orders.objects.filter(
+            user=self.request.user,
+        ).order_by('-create_date')
+        return new_context
 
 
 class ProfileUserView(LoginRequiredMixin, UpdateView):

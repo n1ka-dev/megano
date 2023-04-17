@@ -9,7 +9,7 @@ from app_shop.models import Product
 
 
 class DeliveryMethod(models.Model):
-    code = models.CharField(max_length=25, verbose_name=_('code'), null=True)
+    code = models.CharField(max_length=25, verbose_name=_('code'), null=True, unique=True)
     display_name = models.CharField(max_length=50, verbose_name=_('name'), null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     min_sum = models.PositiveIntegerField(verbose_name=_('min sum'), default=None, null=True, blank=True)

@@ -48,9 +48,6 @@
     </div>
  <div class="Pagination">
     <div class="Pagination-ins">
-
-
-
          {% if page_obj.has_previous %}
             <a class="Pagination-element Pagination-element_prev" href="?page={{ page_obj.previous_page_number }}">
                 <img src="{% static 'img/icons/prevPagination.svg' %}" alt="prevPagination.svg"/>
@@ -66,8 +63,6 @@
                 <img src="{% static 'img/icons/nextPagination.svg' %}" alt="nextPagination.svg"/>
             </a>
         {% endif %}
-
-
     </div>
   </div>
 </div>
