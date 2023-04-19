@@ -71,16 +71,27 @@
                     <div class="Profile-btn">
                       <button class="btn btn_success" type="submit">Сохранить</button>
                     </div>
-                    <div class="Profile-success">
+
 		               {% if messages %}
+                      <div class="Profile-success">
 						<ul class="messages">
 						    {% for message in messages %}
 						    <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
 						    {% endfor %}
 						</ul>
+                      </div>
 						{% endif %}
-                        {{ form.errors }}
-                    </div>
+
+                   {% if form.errors %}
+                        <ul class="errors">
+                        {% for field, errors in form.errors.items %}
+
+                            <li><strong>{{ errors }}</strong></li>
+
+                        {% endfor %}
+                    </ul>
+                      <p>{{ errors.as_text }}</p>
+                    {% endif %}
                   </div>
 
                 </div>

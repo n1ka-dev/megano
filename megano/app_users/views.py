@@ -3,12 +3,13 @@ from django.contrib.auth import authenticate, login, update_session_auth_hash
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, LogoutView
+from django.core.exceptions import ValidationError
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import FormView, DetailView, UpdateView, TemplateView, ListView
-
+from django.utils.translation import ugettext_lazy as _
 from app_cart.models import Orders
 from app_users.forms import AuthForm, RegisterForm, ProfileEditForm
 from app_users.models import Profile
@@ -93,7 +94,7 @@ class ProfileUserView(LoginRequiredMixin, UpdateView):
         form = super(ProfileUserView, self).get_form(form_class)
         form.fields['phone'].initial = self.request.user.profile.phone
         form.fields['email'].initial = self.request.user.email
-
+        print(form.errors.items())
         return form
 
     def get_success_url(self):
@@ -113,9 +114,11 @@ class ProfileUserView(LoginRequiredMixin, UpdateView):
             kwargs['avatar'] = fs.url(filename)
 
         user = self.get_object()
+
         Profile.objects.filter(user=user).update(**kwargs)
         password = form.cleaned_data.get('password')
         if password:
             update_session_auth_hash(self.request, user)
         messages.success(self.request, 'Profile updated successfully')
+
         return super().form_valid(form)

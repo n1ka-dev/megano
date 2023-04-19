@@ -119,7 +119,6 @@ $(document).ready(function(){
 
         let id_product = $(this).data('id');
         let qty = $(this).val();
-        console.log(qty);
         if (qty!=''){
             cart_update(id_product, {'count': qty, 'update': true});
         }else {

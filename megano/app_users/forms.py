@@ -36,7 +36,7 @@ class RegisterForm(UserCreationForm):
 
 class ProfileEditForm(forms.ModelForm):
     avatar = forms.FileField(label=_('Choose an avatar'), required=False,
-                              widget=forms.ClearableFileInput(attrs={'class': 'Profile-file form-input'}))
+                             widget=forms.ClearableFileInput(attrs={'class': 'Profile-file form-input'}))
 
     last_name = forms.CharField(max_length=50, label=_('FIO'),
                                 widget=forms.TextInput(attrs={'class': 'form-input', 'data-validate': 'require'}),
@@ -65,6 +65,13 @@ class ProfileEditForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('last_name', 'email', 'password')
+
+    def clean_email(self):
+        email = username = self.cleaned_data['email']
+        if User.objects.exclude(pk=self.instance.pk).filter(username=username).exists():
+            raise forms.ValidationError(_(f'Email "{username}" is already in use'))
+        else:
+            return email
 
     def clean(self):
         cleaned_data = super(ProfileEditForm, self).clean()
