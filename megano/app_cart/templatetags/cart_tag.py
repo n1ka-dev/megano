@@ -9,19 +9,26 @@ register = template.Library()
 
 
 @register.simple_tag()
-def get_price_delivery(request, *args, **kwargs):
+def get_price_delivery(request, uid=False, *args, **kwargs):
+    """
+    Подсчет стоимости доставки.
+    """
+    order = OrderService(request, uid)
+    return order.get_delivery_price()
+
+
+@register.simple_tag()
+def get_total_price_cart(request, uid=False, *args, **kwargs):
     """
     Подсчет стоимости товаров в корзине.
     """
-    order = OrderService(request)
-    return order.get_delivery_price()
+
+    cart = CartService(request, uid)
+    return cart.get_sum()
 
 
 @register.simple_tag(takes_context=True)
 def get_random_button(context, *args, **kwargs):
-    """
-    Подсчет стоимости товаров в корзине.
-    """
     order = OrderService(context.request)
     btn = ''
     if order.order['s-row']['payment_method'] == 'random_account':
@@ -30,16 +37,7 @@ def get_random_button(context, *args, **kwargs):
 
 
 @register.simple_tag()
-def get_total_price_cart(request, *args, **kwargs):
-    """
-    Подсчет стоимости товаров в корзине.
-    """
-    cart = CartService(request)
-    return cart.get_sum()
-
-
-@register.simple_tag()
-def get_express_delivery_price(request, *args, **kwargs):
+def get_express_delivery_price(request, uid=False, *args, **kwargs):
     # price = SettingsSite.objects.get(name=EXPRESS_DELIVERY_PROPERTY_NAME).value
     return 0
 

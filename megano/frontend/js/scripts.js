@@ -687,7 +687,6 @@ var Order = function(){
                     href = $this.attr('href'),
                     error = false,
                     $validate = $this.closest($blocks).find('[data-validate]')
-                console.log($validate)
                 if ($(e.target).is('.Order-next')) {
                     $validate.each(function(){
                         var $this = $(this);
@@ -701,6 +700,7 @@ var Order = function(){
                     $blocks.index($(href)) < $blocks.index($blocks.filter('.Order-block_OPEN')))
                 ) {
                     $blocks.removeClass('Order-block_OPEN');
+                    console.log(href)
                     $(href).addClass('Order-block_OPEN');
                     $navigate.find('.menu-item').removeClass('menu-item_ACTIVE');
                     $navigate.find('.menu-link[href="' + href + '"]')

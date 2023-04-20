@@ -7,7 +7,7 @@ from app_cart.OrderService import OrderService
 from app_cart.models import DeliveryMethod, Orders, OrderRecord, PaymentMethod
 from app_cart.templatetags.cart_tag import get_total_price_cart, get_count_position_cart, CartService
 from app_shop.models import Product
-from django.views.generic import FormView, TemplateView, CreateView, DetailView
+from django.views.generic import FormView, TemplateView, CreateView, DetailView, UpdateView
 
 from app_cart.forms import CheckoutForm, PayForm
 from app_users.forms import RegisterForm, AuthForm
@@ -20,6 +20,7 @@ TYPE_OPERATION_SET = 'remove'
 
 def save_order_info(request):
     fio = request.POST.get('fio', False)
+    uid = request.POST.get('uid', False)
     phone = request.POST.get('phone', False)
     address = request.POST.get('address', False)
     city = request.POST.get('city', False)
@@ -39,17 +40,19 @@ def save_order_info(request):
     }
 
     order = OrderService(request)
-    cart = CartService(request)
+    cart = CartService(request, uid)
     order.save(data)
     return HttpResponse(JsonResponse({'status': 'success',
                                       'html': order.get_html(),
                                       'delivery_price': order.delivery_method.price,
-                                      'total_price': "{:.2f}".format(float(order.delivery_method.price)+cart.get_sum()),
+                                      'total_price': "{:.2f}".format(
+                                          float(order.delivery_method.price) + cart.get_sum()),
                                       'message': _(f'order info saved')}))
 
 
 def cart_update(request, product_id):
     cart = CartService(request)
+    print('cart_update')
     product = get_object_or_404(Product, id=product_id)
     count = request.POST.get('count', 0)
     count = int(count)
@@ -101,6 +104,11 @@ class OrderDetailView(DetailView):
     model = Orders
     template_name = 'oneorder.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(OrderDetailView, self).get_context_data(**kwargs)
+        context['need_pay_form'] = False if context['object'].status == Orders.PAID else True
+        return context
+
 
 class PayView(TemplateView, FormView):
     template_name = 'payment.html'
@@ -119,7 +127,6 @@ class PayView(TemplateView, FormView):
 
 class CheckoutView(TemplateView, FormView):
     template_name = 'checkout.html'
-    # model = Orders
     upid = None
 
     def get_success_url(self):
@@ -151,6 +158,8 @@ class CheckoutView(TemplateView, FormView):
         context = super(CheckoutView, self).get_context_data(**kwargs)
         cart = CartService(self.request)
         context['cart_list'] = cart
+        context['action_url'] = reverse('checkout')
+
         return context
 
     def get_form(self, form_class=None):
@@ -180,10 +189,53 @@ class CheckoutView(TemplateView, FormView):
         cart = CartService(self.request)
         for item in cart:
             OrderRecord.objects.create(
-                product_name=item['product'].name,
+                product_name=item['product']['name'],
                 count=item['quantity'],
-                price=item['product'].price,
-                product=item['product'],
+                price=item['product']['price'],
+                product_id=item['product']['id'],
                 order=order
             )
+        return super().form_valid(form)
+
+
+class ContinueCheckoutView(UpdateView):
+    model = Orders
+    form_class = CheckoutForm
+    template_name = 'checkout.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ContinueCheckoutView, self).get_context_data(**kwargs)
+        cart = CartService(self.request, context['object'].uid)
+        context['cart_list'] = cart
+        context['action_url'] = reverse('continue-checkout', kwargs={'pk': context['object'].id})
+
+        return context
+
+    def get_form_kwargs(self):
+        kwargs = super(ContinueCheckoutView, self).get_form_kwargs()
+        if self.request.user.is_authenticated:
+            cart = CartService(self.request, self.object.uid)
+            sum_cart = cart.get_sum()
+            kwargs['sum_cart'] = sum_cart
+        return kwargs
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        if 'email' in form.fields and self.request.user.is_authenticated:
+            form.fields['email'].initial = self.request.user.email
+
+        return form
+
+    def get_success_url(self):
+        return reverse('pay', kwargs={'uid': self.object.uid})
+
+    def form_valid(self, form):
+        code_d = form.cleaned_data.get('delivery_method')
+        form.instance.delivery_method = DeliveryMethod.objects.get(code=code_d)
+
+        code_p = form.cleaned_data.get('payment_method')
+        form.instance.payment_method = PaymentMethod.objects.get(code=code_p)
+        form.instance.status = Orders.DRAFT
+        form.save()
+
         return super().form_valid(form)

@@ -1,4 +1,4 @@
-from app_cart.models import DeliveryMethod, PaymentMethod
+from app_cart.models import DeliveryMethod, PaymentMethod, Orders
 from app_shop.models import Product
 from megano import settings
 
@@ -14,7 +14,7 @@ dict_order_names = {
 
 
 class OrderService:
-    def __init__(self, request):
+    def __init__(self, request, init_id_cart=False):
         self.code_payment = None
         self.session = request.session
         order = self.session.get(settings.ORDER_SESSION_ID, {})
@@ -22,6 +22,14 @@ class OrderService:
         self.delivery_method = ''
         self.order = order
         self.display_names = {}
+
+        if init_id_cart:
+            order_exist = Orders.objects.filter(uid=init_id_cart).exists()
+            if order_exist:
+                self.delivery_method = Orders.objects.get(uid=init_id_cart).delivery_method
+
+
+
 
     def save(self, data):
         """ Обновление сессии """

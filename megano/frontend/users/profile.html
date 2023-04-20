@@ -85,9 +85,7 @@
                    {% if form.errors %}
                         <ul class="errors">
                         {% for field, errors in form.errors.items %}
-
                             <li><strong>{{ errors }}</strong></li>
-
                         {% endfor %}
                     </ul>
                       <p>{{ errors.as_text }}</p>

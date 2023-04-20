@@ -8,8 +8,8 @@
             <div class="Cart-block Cart-block_row">
               <div class="Cart-block Cart-block_pict">
                   <a class="Cart-pict" href="{% url 'product-detail' item.product.slug %}">
-                    {% for img in item.product.images.all|slice:"0:1"%}
-                        <img src="{{ img.image.url }}" alt="{{ img.image.alt }}" width="150"/>
+                    {% for img in item.product.images|slice:"0:1"%}
+                        <img src="{{ img.url }}" alt="{{ img.alt }}" width="150"/>
                     {% endfor %}
                   </a>
               </div>

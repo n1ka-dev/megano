@@ -69,8 +69,47 @@ function cart_update(id_product, data){
             });
 }
 
+function save_order_info_act(){
+    fio = $('[name="receiver_name"]').val()
+    phone = $('[name="phone"]').val()
+    email = $('[name="email"]').val()
+    delivery_method = $('[name="delivery_method"]:checked').val()
+    city = $('[name="city"]').val()
+    address = $('[name="address"]').val()
+    payment_method = $('[name="payment_method"]:checked').val()
+    uid = $('[name="uid"]').val()
 
+    save_order_info( {
+        'fio': fio,
+        'phone': phone,
+        'email': email,
+        'delivery_method': delivery_method,
+        'city': city,
+        'address': address,
+        'payment_method': payment_method,
+        'uid': uid,
+    });
+}
 $(document).ready(function(){
+    let $blocks = $('.Order-block'),
+        $navigate = $('.Order-navigate'),
+        href =  window.location.hash.substr(1);
+
+        if (href=='step4'){
+             $blocks.removeClass('Order-block_OPEN');
+             $('#'+href).addClass('Order-block_OPEN');
+             console.log('removeClass');
+             console.log('open ', href);
+             $navigate.find('.menu-item').removeClass('menu-item_ACTIVE');
+             $navigate.find('.menu-link[href="#' + href + '"]')
+                .closest('.menu-item')
+                .addClass('menu-item_ACTIVE');
+             save_order_info_act();
+        }else{
+            location.href.red
+        }
+     $('[href="#step4"]').click(function(e){save_order_info_act();});
+
     /* удаление товара из корзины*/
     $("#cart-area").on('click', '.Cart-delete', function(e){
         e.preventDefault();
@@ -126,25 +165,7 @@ $(document).ready(function(){
         }
      });
 
-    $('[href="#step4"]').click(function(e){
-        fio = $('[name="receiver_name"]').val()
-        phone = $('[name="phone"]').val()
-        email = $('[name="email"]').val()
-        delivery_method = $('[name="delivery_method"]:checked').val()
-        city = $('[name="city"]').val()
-        address = $('[name="address"]').val()
-        payment_method = $('[name="payment_method"]:checked').val()
 
-        save_order_info( {
-            'fio': fio,
-            'phone': phone,
-            'email': email,
-            'delivery_method': delivery_method,
-            'city': city,
-            'address': address,
-            'payment_method': payment_method,
-        });
-    });
     $('.submit-register').click(function(e){
         $('#Register-form').submit();
     })

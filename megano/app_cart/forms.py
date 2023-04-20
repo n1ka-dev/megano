@@ -38,9 +38,10 @@ class CheckoutForm(forms.ModelForm):
     delivery_method = forms.ChoiceField(choices=(), widget=forms.RadioSelect )
     payment_method = forms.ChoiceField(choices=(), widget=forms.RadioSelect, initial='online', )
 
+
     class Meta:
         model = Orders
-        fields = ['receiver_name', 'address', 'city', 'email', 'phone']
+        fields = ['receiver_name', 'address', 'city', 'email', 'phone', 'uid']
 
     def __init__(self, sum_cart=0, *args, **kwargs):
         super().__init__(*args, **kwargs)
