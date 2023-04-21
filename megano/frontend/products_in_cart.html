@@ -41,10 +41,10 @@
         {% endfor %}
          <div class="Cart-total">
             <div class="Cart-block Cart-block_total">
-                <strong class="Cart-title">Итого:</strong>
+                <strong class="Cart-title">{% trans 'Total cost' %}:</strong>
                 <span class="Cart-price"><span class="amount-sum">{% get_total_price_cart request %}</span>$</span>
             </div>
-            <div class="Cart-block"><a class="btn btn_success btn_lg" href="{% url 'checkout'%}">Оформить заказ</a>
+            <div class="Cart-block"><a class="btn btn_success btn_lg" href="{% url 'checkout'%}">{% trans 'Checkout' %}</a>
             </div>
           </div>
     </form>

@@ -21,12 +21,11 @@
     <div class="Middle-top">
       <div class="wrap">
         <div class="Middle-header">
-          <h1 class="Middle-title">История заказов
-          </h1>
+          <h1 class="Middle-title">{% trans 'History of orders' %}</h1>
           <ul class="breadcrumbs Middle-breadcrumbs">
             <li class="breadcrumbs-item"><a href="{% url 'main' %}">home</a>
             </li>
-            <li class="breadcrumbs-item breadcrumbs-item_current"><span>История заказов</span>
+            <li class="breadcrumbs-item breadcrumbs-item_current"><span>{% trans 'History of orders' %}</span>
             </li>
           </ul>
         </div>
@@ -44,25 +43,25 @@
 		              <div class="Order-personal">
 		                <div class="row">
 		                  <div class="row-block"><a class="Order-title" href="{% url 'order_detail' item.id %}">
-			                  Заказ&#32;<span class="Order-numberOrder">№{{ item.id }}</span>&#32;от&#32;
+			                  {% trans 'Order' %}&#32;<span class="Order-numberOrder">№{{ item.id }}</span>&#32;{% trans 'of' %}&#32;
 			                  <span class="Order-dateOrder">{{ item.create_date }}</span></a>
 		                  </div>
 		                  <div class="row-block">
 		                    <div class="Order-info Order-info_delivery">
-		                      <div class="Order-infoType">Тип доставки:</div>
+		                      <div class="Order-infoType">{% trans 'Shipping method' %}:</div>
 		                      <div class="Order-infoContent">{{ item.delivery_method.display_name }}</div>
 		                    </div>
 		                    <div class="Order-info Order-info_pay">
-		                      <div class="Order-infoType">Оплата:</div>
+		                      <div class="Order-infoType">{% trans 'Payment method' %}:</div>
 		                      <div class="Order-infoContent">{{ item.payment_method }}</div>
 		                    </div>
 		                    <div class="Order-info">
-		                      <div class="Order-infoType">Общая стоимость:</div>
+		                      <div class="Order-infoType">{% trans 'Total cost' %}:</div>
 		                      <div class="Order-infoContent"><span class="Order-price">{{ item.get_total }}$</span>
 		                      </div>
 		                    </div>
 		                    <div class="Order-info Order-info_status">
-		                      <div class="Order-infoType">Статус:</div>
+		                      <div class="Order-infoType">{% trans 'Status' %}:</div>
 		                      <div class="Order-infoContent">{{ item.status }}</div>
 		                    </div>
 		                  </div>

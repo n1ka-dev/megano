@@ -69,7 +69,7 @@ class AccountUserView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(AccountUserView, self).get_context_data(**kwargs)
         context['last_order'] = Orders.objects.filter(user=self.request.user).order_by('-create_date')[:1]
-        print(context)
+
         return context
 
 
@@ -94,7 +94,7 @@ class ProfileUserView(LoginRequiredMixin, UpdateView):
         form = super(ProfileUserView, self).get_form(form_class)
         form.fields['phone'].initial = self.request.user.profile.phone
         form.fields['email'].initial = self.request.user.email
-        print(form.errors.items())
+
         return form
 
     def get_success_url(self):

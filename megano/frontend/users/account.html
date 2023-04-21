@@ -53,18 +53,18 @@
 	                <div class="Order Order_anons">
 	                  <div class="Order-personal">
 	                    <div class="row">
-	                      <div class="row-block"><a class="Order-title" href="{% url 'order_detail' order.pk %}">Заказ&#32;<span class="Order-numberOrder">№ {{ order.id }}</span>&#32;от&#32;
+	                      <div class="row-block"><a class="Order-title" href="{% url 'order_detail' order.pk %}">{% trans 'Order' %}&#32;<span class="Order-numberOrder">№ {{ order.id }}</span>&#32;{% trans 'of' %}&#32;
 		                      <span class="Order-dateOrder">{{ order.create_date }}</span></a>
-	                        <div class="Account-editLink"><a href="{% url 'history' %}">{% trans 'History orders' %}</a>
+	                        <div class="Account-editLink"><a href="{% url 'history' %}">{% trans 'History of orders' %}</a>
 	                        </div>
 	                      </div>
 	                      <div class="row-block">
 	                        <div class="Order-info Order-info_delivery">
-	                          <div class="Order-infoType">{% trans 'Delivery Type' %}:</div>
+	                          <div class="Order-infoType">{% trans 'Shipping method' %}:</div>
 	                          <div class="Order-infoContent">{{ order.delivery_method }}</div>
 	                        </div>
 	                        <div class="Order-info Order-info_pay">
-	                          <div class="Order-infoType">{% trans 'Payment Type' %}:</div>
+	                          <div class="Order-infoType">{% trans 'Payment method' %}:</div>
 	                          <div class="Order-infoContent">{{ order.get_payment_method }}</div>
 	                        </div>
 	                        <div class="Order-info">
@@ -80,7 +80,7 @@
 	                  </div>
 	                </div>
 	              {% empty %}
-		              <div class="h1">У Вас пока нет заказов</div>
+		              <div class="h1">{% trans 'You don't have any orders yet' %}</div>
 	              {% endfor %}
               </div>
             </div>
