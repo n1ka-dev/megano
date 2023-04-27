@@ -77,7 +77,7 @@
           <div class="Cards">
               {% for product in catalog%}
             <div class="Card">
-                <a class="Card-picture" href="{% url 'product-detail' product.slug %}"">
+                <a class="Card-picture" href="{{product.get_absolute_url }}">
                     {% for img in product.images.all|slice:"0:1"%}
                         <img src="{{ img.image.url }}" alt="{{ product.name }}"/>
                       {% endfor %}

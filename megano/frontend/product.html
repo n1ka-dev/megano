@@ -110,7 +110,7 @@
                       <h3 class="Section-title">Add Review</h3>
                     </header>
                     <div class="Tabs-addComment">
-                         <form method="post" action="{% url 'product-detail' product.slug %}" class="form" id="add-comment">
+                         <form method="post" action="{{product.get_absolute_url }}" class="form" id="add-comment">
                             {% csrf_token %}
                              <div class="form-group">
                                 {{ form.text }}

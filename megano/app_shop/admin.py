@@ -13,7 +13,7 @@ class CommentTabular(admin.TabularInline):
 @admin.register(Product)
 class Product(admin.ModelAdmin):
     inlines = (PropertiesTabular, CommentTabular)
-    list_display = ['name', 'short_description', 'price']
+    list_display = ['name', 'short_description', 'price', 'published']
     search_fields = ['name', 'short_description']
 
 @admin.register(Tags)

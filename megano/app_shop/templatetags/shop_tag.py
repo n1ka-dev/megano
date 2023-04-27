@@ -73,14 +73,14 @@ def get_catalog_menu(context, *args, **kwargs):
                '</div>' \
                '<div class="CategoriesButton-content">'
     for item in categories:
-        new_item = f'<a href="#"><div class="CategoriesButton-icon"><img src="{item.icon.url}" alt="{item.name}"></div>' \
+        new_item = f'<a href="{item.get_absolut_url()}"><div class="CategoriesButton-icon"><img src="{item.icon.url}" alt="{item.name}"></div>' \
                        f'<span class="CategoriesButton-text">{item.name}</span></a>'
         sub_item_menu = ''
         if item.count_subitems:
             new_item += '<a class="CategoriesButton-arrow" href="#"></a>'
             sub_items = ''
             for sub_item in item.parent.all():
-                sub_items = f'{sub_items}<a class="CategoriesButton-link" href="#">' \
+                sub_items = f'{sub_items}<a class="CategoriesButton-link" href="{item.get_absolut_url()}">' \
                             f'<div class="CategoriesButton-icon">' \
                             f'<img src="{sub_item.icon.url}" alt="{sub_item.name}">' \
                             f'</div><span class="CategoriesButton-text">{sub_item.name}</span>' \

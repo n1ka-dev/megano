@@ -24,10 +24,15 @@ class CatalogView(ListView):
     }
 
     def get_queryset(self):
-        qs = super().get_queryset().prefetch_related('images', 'tags')
+        qs = super().get_queryset().prefetch_related('images', 'tags').filter(published=True)
+
+        if 'category_slug' in self.kwargs:
+            qs = qs.filter(category__slug=self.kwargs['category_slug'])
+
         title = self.request.GET.get('title')
         if title:
             qs = qs.filter(name__icontains=title[1:])
+
         price = self.request.GET.get('price')
         if price:
             price_start, price_end = price.split(';')
@@ -63,6 +68,9 @@ class CatalogView(ListView):
 
 class ProductDetailView(DetailView, FormView):
     model = Product
+    slug_url_kwarg = "product_slug"
+    slug_field = "slug"
+
     form_class = CommentForm
     template_name = 'product.html'
     context_object_name = 'product'
@@ -70,7 +78,7 @@ class ProductDetailView(DetailView, FormView):
         .prefetch_related('images')
 
     def get(self, request, *args, **kwargs):
-        slug = kwargs['slug']
+        slug = kwargs['product_slug']
         Product.objects.filter(slug=slug).update(views_count=F('views_count') + 1)
         item = super().get(request, {'slug': slug})
         return item
@@ -78,13 +86,13 @@ class ProductDetailView(DetailView, FormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context['comments'] = Comment.objects.filter(product__slug=self.kwargs['slug']).select_related('author') \
+        context['comments'] = Comment.objects.filter(product__slug=self.kwargs['product_slug']).select_related('author') \
             .annotate(username=F('author__username')).filter(status='p').order_by('-id')
         context['count_comments'] = len(context['comments'])
         return context
 
     def get_success_url(self):
-        return reverse('product-detail', kwargs={'slug': self.kwargs['slug']})
+        return reverse('product-detail', kwargs={'slug': self.kwargs['product_slug']})
 
     def get_form(self, form_class=None):
         form = super(ProductDetailView, self).get_form(form_class)

@@ -5,6 +5,7 @@ from django.utils.safestring import mark_safe
 from pytils.translit import slugify
 from django.utils.translation import gettext_lazy as _
 
+
 class Category(models.Model):
     name = models.CharField(max_length=250, verbose_name=_('name'))
     slug = models.SlugField(max_length=250, verbose_name=_('slug'), blank=True, unique=True)
@@ -20,6 +21,11 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolut_url(self):
+        return reverse_lazy('category',
+                            kwargs={'category_slug': self.slug}
+                            )
 
     def save(self, *args, **kwargs):
         self.slug = self.slug or slugify(self.name)
@@ -93,6 +99,11 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse_lazy('product-detail',
+                            kwargs={'category_slug': self.category.slug, 'product_slug': self.slug}
+                            )
 
     def save(self, *args, **kwargs):
         self.slug = self.slug or slugify(self.name)
