@@ -86,7 +86,7 @@ class Product(models.Model):
     stock_balance = models.IntegerField(verbose_name=_('stock balance'), default=0)
     free_delivery = models.BooleanField(verbose_name=_('free delivery'), default=True)
 
-    tags = models.ManyToManyField(Tags, verbose_name=_('tags'))
+    tags = models.ManyToManyField(Tags, verbose_name=_('tags'), blank=True)
     views_count = models.IntegerField(verbose_name=_('views count'), default=0)
 
     class Meta:

@@ -13,8 +13,11 @@ class CommentTabular(admin.TabularInline):
 @admin.register(Product)
 class Product(admin.ModelAdmin):
     inlines = (PropertiesTabular, CommentTabular)
-    list_display = ['name', 'short_description', 'price', 'published']
+    list_display = ['name', 'short_description', 'price', 'published', 'category', 'free_delivery', 'get_tags']
     search_fields = ['name', 'short_description']
+
+    def get_tags(self, obj):
+        return ', '.join([str(tag) for tag in obj.tags.all()])
 
 @admin.register(Tags)
 class Tags(admin.ModelAdmin):

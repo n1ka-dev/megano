@@ -29,9 +29,13 @@ class CatalogView(ListView):
         if 'category_slug' in self.kwargs:
             qs = qs.filter(category__slug=self.kwargs['category_slug'])
 
+        tag = self.request.GET.get('tag')
+        if tag:
+            qs = qs.filter(tags__name__in=[tag])
+
         title = self.request.GET.get('title')
         if title:
-            qs = qs.filter(name__icontains=title[1:])
+            qs = qs.filter(name__icontains=title)
 
         price = self.request.GET.get('price')
         if price:

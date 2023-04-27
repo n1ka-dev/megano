@@ -27,7 +27,7 @@
               <strong class="Section-title">{% trans 'Filter' %}</strong>
             </header>
             <div class="Section-columnContent">
-              <form class="form" action="{% url 'catalog' %}" method="GET">
+              <form class="form" action="?" method="GET">
                 <div class="form-group">
                   <div class="range Section-columnRange">
                     <input class="range-line" id="price" name="price" type="text" data-type="double" data-min="{{ min_price }}" data-max="{{ max_price }}" data-from="{{ min_price_set }}" data-to="{{ max_price_set }}"/>
