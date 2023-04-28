@@ -7,14 +7,14 @@
         <div class="Cart-product">
             <div class="Cart-block Cart-block_row">
               <div class="Cart-block Cart-block_pict">
-                  <a class="Cart-pict" href="{% url 'product-detail' item.product.slug %}">
+                  <a class="Cart-pict" href="{{ item.product.get_absolute_url }}">
                     {% for img in item.product.images|slice:"0:1"%}
                         <img src="{{ img.url }}" alt="{{ img.alt }}" width="150"/>
                     {% endfor %}
                   </a>
               </div>
               <div class="Cart-block Cart-block_info">
-                  <a class="Cart-title" href="{% url 'product-detail' item.product.slug %}">{{ item.product.name }}</a>
+                  <a class="Cart-title" href="{{ item.product.get_absolute_url }}">{{ item.product.name }}</a>
                 <div class="Cart-desc">{{ item.product.short_description }}</div>
               </div>
               <div class="Cart-block Cart-block_price">

@@ -29,6 +29,7 @@ class Category(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = self.slug or slugify(self.name)
+        self.slug = self.slug.lower()
         super().save(*args, **kwargs)
 
 

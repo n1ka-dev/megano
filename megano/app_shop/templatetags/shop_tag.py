@@ -43,18 +43,25 @@ def get_sort_block(context, *args, **kwargs):
 
 
 @register.simple_tag(takes_context=True)
-def get_cloud_tags(context, *args, **kwargs):
+def get_cloud_tags(context, tags, *args, **kwargs):
+
     tags_l = []
-    tags = Tags.objects.all()
-    cur_gets = context.request.GET
+
+    cur_gets = context.request.GET  # если уже есть фильтрация, то не сбрасываем ее
 
     cur_gets_str = '&'.join([f'{key}={val}' for key, val in cur_gets.items() if key != 'tag'])
     for tag in tags:
+        tag = tag['tags__name']
+        status = ''
         if cur_gets:
-            tags_l.append(f'<a class="btn btn_default btn_sm" href="?{cur_gets_str}&tag={tag.name}">{tag.name}</a>')
+            if 'tag' in cur_gets and str(tag) in cur_gets['tag']:
+                status = ' active'
+
+            tags_l.append(
+                f'<a class="btn btn_default btn_sm{status}" href="?{cur_gets_str}&tag={tag}">{tag}</a>')
         else:
             tags_l.append(
-                f'<a class="btn btn_default btn_sm" href="?tag={tag.name}">{tag.name}</a>')
+                f'<a class="btn btn_default btn_sm" href="?tag={tag}">{tag}</a>')
 
     out_str = ''.join(tags_l)
     return mark_safe(out_str)
@@ -63,8 +70,8 @@ def get_cloud_tags(context, *args, **kwargs):
 @register.simple_tag(takes_context=True)
 def get_catalog_menu(context, *args, **kwargs):
     categories = Category.objects.filter(parent_category__isnull=True).annotate(
-            count_subitems=Count('parent')
-        )
+        count_subitems=Count('parent')
+    )
     menu_out = '<div class="CategoriesButton"><div class="CategoriesButton-title">' \
                '<div class="CategoriesButton-icon"><img src="/static/img/icons/allDep.svg" alt="allDep.svg">' \
                '</div><span class="CategoriesButton-text">All Departments</span>' \
@@ -74,13 +81,13 @@ def get_catalog_menu(context, *args, **kwargs):
                '<div class="CategoriesButton-content">'
     for item in categories:
         new_item = f'<a href="{item.get_absolut_url()}"><div class="CategoriesButton-icon"><img src="{item.icon.url}" alt="{item.name}"></div>' \
-                       f'<span class="CategoriesButton-text">{item.name}</span></a>'
+                   f'<span class="CategoriesButton-text">{item.name}</span></a>'
         sub_item_menu = ''
         if item.count_subitems:
             new_item += '<a class="CategoriesButton-arrow" href="#"></a>'
             sub_items = ''
             for sub_item in item.parent.all():
-                sub_items = f'{sub_items}<a class="CategoriesButton-link" href="{item.get_absolut_url()}">' \
+                sub_items = f'{sub_items}<a class="CategoriesButton-link" href="{sub_item.get_absolut_url()}">' \
                             f'<div class="CategoriesButton-icon">' \
                             f'<img src="{sub_item.icon.url}" alt="{sub_item.name}">' \
                             f'</div><span class="CategoriesButton-text">{sub_item.name}</span>' \

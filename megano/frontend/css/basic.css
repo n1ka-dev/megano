@@ -2528,3 +2528,8 @@ button.link {
 .wrap-content {
   margin: 0 auto;
 }
+.buttons .btn.active {
+    background: #0063d1;
+    color: #fff;
+    border-color: #0063d1;
+}

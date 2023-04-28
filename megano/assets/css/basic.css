@@ -2559,3 +2559,8 @@ span.random_btn {
     background:url('../img/icons/random.png') center no-repeat;
     cursor:pointer;
 }
+.buttons .btn.active {
+    background: #0063d1;
+    color: #fff;
+    border-color: #0063d1;
+}

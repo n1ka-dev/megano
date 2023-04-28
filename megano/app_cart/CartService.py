@@ -28,7 +28,9 @@ class CartService:
         products = Product.objects.filter(id__in=product_ids)
         for pr in products:
             product = {'id': pr.id, 'name': pr.name, 'price': float(pr.price), 'slug': pr.slug,
-                       'images': [{'url': im.image.url, 'alt': im.alt} for im in pr.images.all()]}
+                       'images': [{'url': im.image.url, 'alt': im.alt} for im in pr.images.all()],
+                       'get_absolute_url': str(pr.get_absolute_url())
+                       }
 
             self.cart[str(product['id'])]['product'] = product
 
