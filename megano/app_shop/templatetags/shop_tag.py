@@ -53,12 +53,14 @@ def get_cloud_tags(context, tags, *args, **kwargs):
     for tag in tags:
         tag = tag['tags__name']
         status = ''
+        tag_url = f'&tag={tag}'
         if cur_gets:
             if 'tag' in cur_gets and str(tag) in cur_gets['tag']:
                 status = ' active'
+                tag_url = ''
 
             tags_l.append(
-                f'<a class="btn btn_default btn_sm{status}" href="?{cur_gets_str}&tag={tag}">{tag}</a>')
+                f'<a class="btn btn_default btn_sm{status}" href="?{cur_gets_str}{tag_url}">{tag}</a>')
         else:
             tags_l.append(
                 f'<a class="btn btn_default btn_sm" href="?tag={tag}">{tag}</a>')
