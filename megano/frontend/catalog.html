@@ -23,6 +23,7 @@
       <div class="wrap">
         <div class="Section-column">
           <div class="Section-columnSection">
+             {% if catalog %}
             <header class="Section-header">
               <strong class="Section-title">{% trans 'Filter' %}</strong>
             </header>
@@ -56,7 +57,9 @@
                 </div>
               </form>
             </div>
+            {% endif %}
           </div>
+          {% if catalog %}
           <div class="Section-columnSection">
             <header class="Section-header">
               <strong class="Section-title">{% trans 'Popular tags' %}</strong>
@@ -67,12 +70,15 @@
               </div>
             </div>
           </div>
+          {% endif %}
         </div>
         <div class="Section-content">
+            {% if catalog %}
           <div class="Sort">
             <div class="Sort-title">{% trans 'Sort by' %}:</div>
            {% get_sort_block %}
           </div>
+            {% endif %}
           <div class="message-box"></div>
           <div class="Cards">
               {% for product in catalog%}
@@ -95,8 +101,11 @@
                 </div>
               </div>
             </div>
+              {% empty %}
+                Ничего не нашлось =(
               {% endfor %}
           </div>
+          {% if catalog %}
           <div class="Pagination">
             <div class="Pagination-ins">
                  {% if page_obj.has_previous %}
@@ -116,6 +125,7 @@
                 {% endif %}
             </div>
           </div>
+          {% endif %}
         </div>
       </div>
     </div>

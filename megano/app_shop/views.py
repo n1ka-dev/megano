@@ -65,16 +65,17 @@ class CatalogView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         qs_ordered = self.get_queryset().order_by('price')
-        context['min_price'], context['max_price'] = qs_ordered.first().price, qs_ordered.last().price
-        price = self.request.GET.get('price')
-        context['free_delivery'] = 'checked' if self.request.GET.get('free_delivery') else ''
-        context['in_stock'] = 'checked' if self.request.GET.get('in_stock') else ''
-        context['tags'] = self._get_old_qs().values('tags__name').order_by("tags__name").distinct('tags__name')
-        print(context['tags'].query)
-        if price:
-            context['min_price_set'], context['max_price_set'] = price.split(';')
-        else:
-            context['min_price_set'], context['max_price_set'] = context['min_price'], context['max_price']
+        if qs_ordered.exists():
+            context['min_price'], context['max_price'] = qs_ordered.first().price, qs_ordered.last().price
+            price = self.request.GET.get('price')
+            context['free_delivery'] = 'checked' if self.request.GET.get('free_delivery') else ''
+            context['in_stock'] = 'checked' if self.request.GET.get('in_stock') else ''
+            context['tags'] = self._get_old_qs().values('tags__name').order_by("tags__name").distinct('tags__name')
+
+            if price:
+                context['min_price_set'], context['max_price_set'] = price.split(';')
+            else:
+                context['min_price_set'], context['max_price_set'] = context['min_price'], context['max_price']
 
         return context
 

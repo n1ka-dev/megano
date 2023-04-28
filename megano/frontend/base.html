@@ -128,9 +128,9 @@
         </div>
         <div class="Header-search">
           <div class="search">
-            <form class="form form_search" action="#" method="post">
-              <input class="search-input" id="query" name="query" type="text" placeholder="What are you looking for ..."/>
-              <button class="search-button" type="submit" name="search" id="search"><img src="{% static '/img/icons/search.svg' %}" alt="search.svg"/>{% trans 'Search' %}
+            <form class="form form_search" action="{% url 'catalog' %}" method="GET">
+              <input class="search-input" id="query" name="title" type="text" placeholder="{% trans 'What are you looking for ...' %}" value="{{ request.GET.title }}"/>
+              <button class="search-button" type="submit" name="" id="search"><img src="{% static '/img/icons/search.svg' %}" alt="search.svg"/>{% trans 'Search' %}
               </button>
             </form>
           </div>
