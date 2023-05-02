@@ -68,9 +68,12 @@
 		                </div>
 		              </div>
 		            </div>
-	          {% endfor %}
+	           {% empty %}
+				  <div class="h1">{% trans 'You don\'t have any orders yet' %}</div>
+			  {% endfor %}
         </div>
-		<!--start prolongation -->
+		{% if object_list %}
+		<!--start Pagination -->
 		<div class="Pagination">
 			<div class="Pagination-ins">
 				{% if page_obj.has_previous %}
@@ -84,12 +87,13 @@
 				</a>
 				{% endfor %}
 				{% if page_obj.has_next %}
-				<a class="Pagination-element Pagination-element_prev" href="?page={{ page_obj.next_page_number }}">
-					<img src="{% static 'img/icons/nextPagination.svg' %}" alt="nextPagination.svg"/>
-				</a>
+					<a class="Pagination-element Pagination-element_prev" href="?page={{ page_obj.next_page_number }}">
+						<img src="{% static 'img/icons/nextPagination.svg' %}" alt="nextPagination.svg"/>
+					</a>
 				{% endif %}
 			</div>
-		</div><!--end prolongation -->
+		</div><!--end Pagination -->
+			{% endif %}
       </div>
     </div>
   </div>

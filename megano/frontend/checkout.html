@@ -58,13 +58,15 @@
 				</div>
 			</div>
 			<div class="Section-content">
-                {% if request.user.is_authenticated %}
-                    {% include 'checkout/first_step_user_params.html' %}
-                {% elif request.GET.already_register  %}
+
+                {% if request.GET.already_register  %}
                     {% include 'checkout/auth_step.html' %}
-                {% else  %}
+                {% elif not request.user.is_authenticated  %}
                     {% include 'checkout/regs_step.html' %}
-                {% endif %}
+				{% else  %}
+                    {% include 'checkout/first_step_user_params.html' %}
+
+
 						<div class="Order-block" id="step2">
 							<header class="Section-header Section-header_sm">
 								<h2 class="Section-title">{% trans 'Step 2 Shipping Method' %}</h2>
@@ -149,6 +151,15 @@
 								</div>
 							</div>
 						</div>
+				{% endif %}
+				{% if form.errors %}
+					{% for field in form %}
+						{% for error in field.errors %}
+							<p> {{ field.label }}: {{ error }} </p>
+						{% endfor %}
+					{% endfor %}
+				{% endif %}
+
 					</form>
 				</div>
 			</div>

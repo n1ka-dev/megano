@@ -159,6 +159,7 @@ var form = function(){
                     validate = $this.data('validate'),
                     message = '',
                     error = false;
+                console.log(validate)
                 validate = validate.split(' ');
                 validate.forEach(function(v){
                     switch (v){

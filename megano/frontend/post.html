@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+{% block title %}Cart{% endblock %}
+{% block breadcrumbs %}
+    <nav aria-label="breadcrumb">
+         <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'main' %}">{% trans 'Home' %}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'blog' %}">{% trans 'Megano Blog' %}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ object.title  }}</li>
+         </ol>
+    </nav>
+{% endblock %}
+{% block content %}
+<div class="Middle Middle_top">
+    <div class="Middle-top">
+      <div class="wrap">
+        <div class="Middle-header">
+          <h1 class="Middle-title">{{ object.title  }}</h1>
+          <ul class="breadcrumbs Middle-breadcrumbs">
+            <li class="breadcrumbs-item"><a href="{% url 'main' %}">{% trans 'Home' %}</a>
+            </li>
+              <li class="breadcrumbs-item"><a href="{% url 'blog' %}">{% trans 'Blog' %}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="Section">
+      <div class="wrap">
+        <div class="Cards_blog detail_page">
+             <div class="">
+                 <img src="{{ object.image.url }}" alt="{{ news.title }}"/>
+              <div class="Card-content">
+                <div class="Card-description">{{ object.text }}</div>
+              </div>
+            </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

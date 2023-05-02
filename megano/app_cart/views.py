@@ -52,7 +52,6 @@ def save_order_info(request):
 
 def cart_update(request, product_id):
     cart = CartService(request)
-    print('cart_update')
     product = get_object_or_404(Product, id=product_id)
     count = request.POST.get('count', 0)
     count = int(count)
@@ -80,7 +79,6 @@ def cart_detail(request):
     return render(request, 'cart.html', {'cart_list': cart})
 
 
-# TODO дублирование кода. подумать как убрать
 def products_in_cart(request):
     cart = CartService(request)
     return render(request, 'products_in_cart.html', {'cart_list': cart})
@@ -175,6 +173,13 @@ class CheckoutView(TemplateView, FormView):
             form.fields['email'].initial = self.request.user.email
 
         return form
+
+    def form_invalid(self, form):
+
+        for field in form.errors:
+            print(field)
+
+        return super().form_invalid(form)
 
     def form_valid(self, form):
         form.instance.user = self.request.user

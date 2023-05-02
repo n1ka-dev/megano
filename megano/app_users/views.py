@@ -32,6 +32,10 @@ class SiteRegistrationUserView(FormView):
     def get(self, *args, **kwargs):
         if self.request.user.is_authenticated:
             return HttpResponseRedirect(reverse_lazy('main'))
+
+        if self.request.GET.get('already_register', False):
+            return HttpResponseRedirect(reverse_lazy('login'))
+
         return super().get(self.request, *args, **kwargs)
 
     def get_success_url(self):

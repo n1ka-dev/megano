@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 
 from django.utils.translation import gettext_lazy as _
 
+from app_users.models import Profile
+
 
 class AuthForm(AuthenticationForm):
     username = forms.CharField(label='', widget=forms.TextInput(attrs={'class': 'form-control'}))
@@ -25,13 +27,27 @@ class RegisterForm(UserCreationForm):
     password1 = forms.CharField(
         label="Password",
         widget=forms.PasswordInput(
-            attrs={'class': 'form-input', 'type': 'password', 'placeholder': 'Тут можно изменить пароль'}),
+            attrs={'class': 'form-input', 'type': 'password', 'placeholder': 'Тут можно изменить пароль',
+                   'data-validate': 'require'}),
     )
     password2 = forms.CharField(
         label="Confirm password",
         widget=forms.PasswordInput(
-            attrs={'class': 'form-input', 'type': 'password', 'placeholder': 'Введите пароль повторно'}),
+            attrs={'class': 'form-input', 'type': 'password', 'placeholder': 'Введите пароль повторно',
+                   'data-validate': 'require'}),
     )
+
+    def clean_email(self):
+        return self.cleaned_data['email'].lower()
+
+    def clean_phone(self):
+        phone = self.cleaned_data['phone']
+        phone = phone.replace('+7', '').replace(' ', '').replace('(', '').replace(')', '').replace('-', '')
+
+        if Profile.objects.filter(phone=phone).exists():
+            raise forms.ValidationError(_(f'Phone "{phone}" is already in use'))
+        else:
+            return phone
 
 
 class ProfileEditForm(forms.ModelForm):
@@ -67,11 +83,20 @@ class ProfileEditForm(forms.ModelForm):
         fields = ('last_name', 'email', 'password')
 
     def clean_email(self):
-        email = username = self.cleaned_data['email']
+        email = username = self.cleaned_data['email'].lower()
         if User.objects.exclude(pk=self.instance.pk).filter(username=username).exists():
             raise forms.ValidationError(_(f'Email "{username}" is already in use'))
         else:
             return email
+
+    def clean_phone(self):
+        phone = self.cleaned_data['phone']
+        phone = phone.replace('+7', '').replace(' ', '').replace('(', '').replace(')', '').replace('-', '')
+
+        if Profile.objects.filter(phone=phone).exclude(pk=self.instance.pk).exists():
+            raise forms.ValidationError(_(f'Phone "{phone}" is already in use'))
+        else:
+            return phone
 
     def clean(self):
         cleaned_data = super(ProfileEditForm, self).clean()

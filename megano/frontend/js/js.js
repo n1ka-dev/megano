@@ -91,6 +91,8 @@ function save_order_info_act(){
     });
 }
 $(document).ready(function(){
+    $("#id_phone").mask("+7 (999) 999-99-99");
+
     let $blocks = $('.Order-block'),
         $navigate = $('.Order-navigate'),
         href =  window.location.hash.substr(1);

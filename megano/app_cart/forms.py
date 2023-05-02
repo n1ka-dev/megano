@@ -43,6 +43,12 @@ class CheckoutForm(forms.ModelForm):
         model = Orders
         fields = ['receiver_name', 'address', 'city', 'email', 'phone', 'uid']
 
+    def clean_phone(self):
+        phone = self.cleaned_data['phone']
+        phone = phone.replace('+7', '').replace(' ', '').replace('(', '').replace(')', '').replace('-', '')
+
+        return phone
+
     def __init__(self, sum_cart=0, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
