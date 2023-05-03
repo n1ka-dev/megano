@@ -14,7 +14,7 @@ class AuthForm(AuthenticationForm):
 
 
 class RegisterForm(UserCreationForm):
-    fio = forms.CharField(max_length=50, label=_('FIO'),
+    fio = forms.CharField(max_length=50, label=_('Full name'),
                           widget=forms.TextInput(attrs={'class': 'form-input', 'data-validate': 'require'}),
                           error_messages={'required': _('Enter your Name')})
     phone = forms.CharField(max_length=50, label=_('Phone'), widget=forms.TextInput(

@@ -3,7 +3,7 @@ import urllib
 from django import template
 from django.db.models import Sum, F, Case, When, Count
 from django.utils.safestring import mark_safe
-
+from django.utils.translation import gettext_lazy as _
 from app_shop.models import Category, Tags
 
 register = template.Library()
@@ -74,9 +74,10 @@ def get_catalog_menu(context, *args, **kwargs):
     categories = Category.objects.filter(parent_category__isnull=True).annotate(
         count_subitems=Count('parent')
     )
+    all_departments = _('All Departments')
     menu_out = '<div class="CategoriesButton"><div class="CategoriesButton-title">' \
                '<div class="CategoriesButton-icon"><img src="/static/img/icons/allDep.svg" alt="allDep.svg">' \
-               '</div><span class="CategoriesButton-text">All Departments</span>' \
+               f'</div><span class="CategoriesButton-text">{all_departments}</span>' \
                '<div class="CategoriesButton-arrow">' \
                '</div>' \
                '</div>' \

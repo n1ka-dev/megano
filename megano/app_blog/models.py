@@ -9,7 +9,7 @@ class BlogNews(models.Model):
     slug = models.SlugField(max_length=250, verbose_name=_('slug'), blank=True, unique=True)
     date_create = models.DateTimeField(auto_now_add=True, verbose_name=_('create date'))
     text = models.TextField(verbose_name=_('text'), null=True, blank=True)
-    is_active = models.BooleanField(verbose_name=_('is_active'), default=False)
+    is_active = models.BooleanField(verbose_name=_('is active'), default=False)
     image = models.FileField(upload_to='uploads/blog/')
 
     class Meta:
