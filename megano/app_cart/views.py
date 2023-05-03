@@ -56,22 +56,33 @@ def cart_update(request, product_id):
     count = request.POST.get('count', 0)
     count = int(count)
     if count and request.method == 'POST':
+        if count < 1 or count == cart.get_count_product(product):
+            return HttpResponse(JsonResponse({
+                'status': 'error',
+                'amount_sum': get_total_price_cart(request),
+                'amount_count': get_count_position_cart(request),
+                'message': ' '.join([str(_('Value must be greater than 0'))])
+
+            }))
+
         update = request.POST.get('update', False)
         cart.add(product=product, count=count, update_quantity=update)
-        if update:
-            status = _('updated')
-        else:
-            status = _('added')
-        return HttpResponse(JsonResponse({'status': 'success', "amount_sum": get_total_price_cart(request),
-                                          "amount_count": get_count_position_cart(request),
-                                          'message': _(f'Product {product.name} '
-                                                       f'successfully {status}')}))
+
+        return HttpResponse(JsonResponse({
+            'status': 'success',
+            'amount_sum': get_total_price_cart(request),
+            'amount_count': get_count_position_cart(request),
+            'message': ' '.join([str(_('Cart was successfully updated'))])
+
+        }))
     else:
         cart.remove(product)
         return HttpResponse(JsonResponse({'status': 'success', "amount_sum": get_total_price_cart(request),
                                           "amount_count": get_count_position_cart(request),
-                                          'message': _(f'Product {product.name} '
-                                                       'successfully removed')}))
+                                          'message': ' '.join([str(_('Product')), product.name,
+                                                               str(_('successfully removed'))])
+
+                                          }))
 
 
 def cart_detail(request):

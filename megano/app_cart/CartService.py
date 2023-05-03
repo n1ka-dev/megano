@@ -42,6 +42,13 @@ class CartService:
     def __len__(self):
         return sum(item['quantity'] for item in self.cart.values())
 
+    def get_count_product(self, product):
+        """
+            вернет кол-во product в корзине
+        """
+        product_id = str(product.id)
+        return self.cart[product_id]['quantity'] if product_id in self.cart else 0
+
     def add(self, product, count=1, update_quantity=False):
         """
         Добавить продукт в корзину или обновить его количество.

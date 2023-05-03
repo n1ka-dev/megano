@@ -67,6 +67,7 @@ class CatalogView(ListView):
         qs_ordered = self.get_queryset().order_by('price')
         if qs_ordered.exists():
             context['min_price'], context['max_price'] = qs_ordered.first().price, qs_ordered.last().price
+
             price = self.request.GET.get('price')
             context['free_delivery'] = 'checked' if self.request.GET.get('free_delivery') else ''
             context['in_stock'] = 'checked' if self.request.GET.get('in_stock') else ''
@@ -76,7 +77,8 @@ class CatalogView(ListView):
                 context['min_price_set'], context['max_price_set'] = price.split(';')
             else:
                 context['min_price_set'], context['max_price_set'] = context['min_price'], context['max_price']
-
+        else:
+            print('not exist')
         return context
 
 

@@ -659,15 +659,23 @@ var Amount = function(){
         init: function(){
             $add.on('click', function(e){
                 e.preventDefault();
+                $remove.show();
                 var $inputThis = $(this).siblings($input).filter($input);
                 var value = parseFloat($inputThis.val());
-                $inputThis.val( value + 1);
+                if(value<50)
+                    $inputThis.val( value + 1);
             });
             $remove.on('click', function(e){
                 e.preventDefault();
                 var $inputThis = $(this).siblings($input).filter($input);
                 var value = parseFloat($inputThis.val());
-                $inputThis.val(value>0?value - 1:0);
+                if(value>1)
+                    $inputThis.val(value - 1);
+
+                if(value<=2)
+                     $remove.hide()
+
+
             });
         }
     };

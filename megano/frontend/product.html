@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load l10n %}
 {% load shop_tag %}
 {% block title %}
     {{ product.name }}
@@ -12,10 +13,11 @@
         <div class="Middle-header">
           <h1 class="Middle-title">{{ product.name }}</h1>
           <ul class="breadcrumbs Middle-breadcrumbs">
-            <li class="breadcrumbs-item"><a href="{% url 'main' %}">home</a>
+            <li class="breadcrumbs-item"><a href="{% url 'main' %}">{% trans 'Home' %}</a>
             </li>
-            <li class="breadcrumbs-item breadcrumbs-item_current"><span>Product</span>
+            <li class="breadcrumbs-item"><a href="{% url 'catalog' %}">{% trans 'Catalog' %}</a>
             </li>
+
           </ul>
         </div>
       </div>
@@ -43,7 +45,7 @@
                 <h2 class="ProductCard-title">{{ product.name }}</h2>
                 <div class="ProductCard-info">
                   <div class="ProductCard-cost">
-                    <div class="ProductCard-price">${{ product.price }}
+                    <div class="ProductCard-price">${{ product.price|unlocalize }}
                     </div>
                   </div>
                 </div>
@@ -68,16 +70,16 @@
               </div>
               <div class="ProductCard-footer">
                 <div class="ProductCard-tags">
-                  <strong class="ProductCard-tagsTitle">Tags:</strong>
+                  <strong class="ProductCard-tagsTitle">{% trans 'Tags' %}:</strong>
                   {{ product.get_tags_link }}
                 </div>
               </div>
             </div>
           </div>
           <div class="Tabs Tabs_default">
-            <div class="Tabs-links"><a class="Tabs-link_ACTIVE Tabs-link" href="#description"><span>Описание</span></a>
-                <a class="Tabs-link" href="#addit"><span>AdditionaL Info</span></a>
-                <a class="Tabs-link" href="#reviews"><span>Reviews (<span class="count-comments">{{ count_comments }}</span>)</span></a>
+            <div class="Tabs-links"><a class="Tabs-link_ACTIVE Tabs-link" href="#description"><span>{% trans 'Description' %}</span></a>
+                <a class="Tabs-link" href="#addit"><span>{% trans 'AdditionaL Info' %}</span></a>
+                <a class="Tabs-link" href="#reviews"><span>{% trans 'Reviews' %} (<span class="count-comments">{{ count_comments }}</span>)</span></a>
             </div>
             <div class="Tabs-wrap">
               <div class="Tabs-block" id="description">
@@ -99,7 +101,8 @@
               </div>
               <div class="Tabs-block" id="reviews">
                 <header class="Section-header">
-                    <h3 class="Section-title"><span class="count-comments">{{ count_comments }}</span> Reviews
+                    <h3 class="Section-title"><span class="count-comments">{{ count_comments }}</span>
+                        {% trans 'Reviews' %}
                   </h3>
                 </header>
                 <div class="Comments" id="comments-list">
@@ -107,7 +110,7 @@
                 </div>
                   {% if request.user.is_authenticated %}
                     <header class="Section-header Section-header_product">
-                      <h3 class="Section-title">Add Review</h3>
+                      <h3 class="Section-title">{% trans 'Add Review' %}</h3>
                     </header>
                     <div class="Tabs-addComment">
                          <form method="post" action="{{product.get_absolute_url }}" class="form" id="add-comment">

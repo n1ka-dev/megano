@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load l10n %}
+
 {% block title %}
     {% trans 'Megano - Catalog' %}
 {% endblock %}
@@ -10,7 +12,7 @@
     <div class="Middle-top">
       <div class="wrap">
         <div class="Middle-header">
-          <h1 class="Middle-title">Catalog Megano</h1>
+          <h1 class="Middle-title">{% trans 'Catalog Megano' %}</h1>
           <ul class="breadcrumbs Middle-breadcrumbs">
             <li class="breadcrumbs-item"><a href="{% url 'main' %}">{% trans 'Home' %}</a></li>
             <li class="breadcrumbs-item breadcrumbs-item_current"><span>{% trans 'Catalog' %}</span>
@@ -23,6 +25,7 @@
       <div class="wrap">
         <div class="Section-column">
           <div class="Section-columnSection">
+
              {% if catalog %}
             <header class="Section-header">
               <strong class="Section-title">{% trans 'Filter' %}</strong>
@@ -31,7 +34,8 @@
               <form class="form" action="?" method="GET">
                 <div class="form-group">
                   <div class="range Section-columnRange">
-                    <input class="range-line" id="price" name="price" type="text" data-type="double" data-min="{{ min_price }}" data-max="{{ max_price }}" data-from="{{ min_price_set }}" data-to="{{ max_price_set }}"/>
+                    <input class="range-line" id="price" name="price" type="text" data-type="double" data-min="{{ min_price|unlocalize }}"
+                           data-max="{{ max_price|unlocalize }}" data-from="{{ min_price_set|unlocalize }}" data-to="{{ max_price_set|unlocalize }}"/>
                     <div class="range-price">{% trans 'Price' %}:&#32;
                       <div class="rangePrice">
                       </div>
@@ -92,7 +96,7 @@
                 <strong class="Card-title"><a href="product.html">{{ product.name }}</a>
                 </strong>
                 <div class="Card-description">
-                  <div class="Card-cost"><span class="Card-price">${{ product.price }}</span>
+                  <div class="Card-cost"><span class="Card-price">${{ product.price|unlocalize }}</span>
                   </div>
                   <div class="Card-category">{{ product.get_tags_str }}
                   </div>
